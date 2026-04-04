@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌾 農場遊戲</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-wrapper">
+
+    <!-- ── HUD ── -->
+    <div class="hud">
+      <div class="hud-left">
+        <span class="day-display" id="day-display">第 1 天</span>
+        <span class="hud-sep">|</span>
+        <span class="coins-display" id="coins-display">💰 100</span>
+        <span class="hud-sep">|</span>
+        <span class="level-display" id="level-display">⭐ Lv.1 新農夫</span>
+        <div class="xp-bar-wrap">
+          <div class="xp-bar"><div class="xp-fill" id="xp-fill"></div></div>
+          <span class="xp-text" id="xp-text">0/100 XP</span>
+        </div>
+      </div>
+      <div class="hud-right">
+        <span class="season-display" id="season-display">🌸 春</span>
+        <span class="weather-display" id="weather-display">☀️ 晴天</span>
+      </div>
+    </div>
+
+    <!-- ── Tool Bar ── -->
+    <div class="toolbar">
+      <span class="tool-label">工具：</span>
+      <button class="tool-btn active" id="tool-seed"    data-tool="seed">🌱 種植</button>
+      <button class="tool-btn"        id="tool-water"   data-tool="water">💧 澆水</button>
+      <button class="tool-btn"        id="tool-harvest" data-tool="harvest">🌾 收穫</button>
+      <span class="selected-info" id="selected-info">請選擇種子</span>
+      <span class="day-timer" id="day-timer">⏱️ 2:00</span>
+    </div>
+
+    <!-- ── Main Area ── -->
+    <div class="main-area">
+
+      <!-- Farm -->
+      <div class="farm-container">
+        <h1 class="farm-title">🌾 我的農場</h1>
+        <div class="farm-grid" id="farm-grid"></div>
+        <div class="log-wrap">
+          <div class="log-title">📋 活動記錄</div>
+          <div class="activity-log" id="activity-log"></div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+
+        <!-- Tabs -->
+        <div class="tab-group">
+          <button class="tab-btn active" data-tab="shop">🏪 商店</button>
+          <button class="tab-btn"        data-tab="inventory">🏠 倉庫</button>
+          <button class="tab-btn"        data-tab="quests">📋 任務</button>
+        </div>
+
+        <!-- Shop Panel -->
+        <div class="panel" id="panel-shop">
+          <div class="panel-hint">選好種子後點擊農地種植</div>
+          <div class="seed-list" id="seed-list"></div>
+        </div>
+
+        <!-- Inventory Panel -->
+        <div class="panel hidden" id="panel-inventory">
+          <div class="inv-header">
+            <span class="panel-hint">收穫的作物存放於此</span>
+            <button class="sell-all-btn" id="sell-all-btn">全部出售</button>
+          </div>
+          <div class="inv-grid" id="inv-grid"></div>
+          <div class="inv-empty" id="inv-empty">倉庫是空的</div>
+        </div>
+
+        <!-- Quests Panel -->
+        <div class="panel hidden" id="panel-quests">
+          <div class="panel-hint">每日任務（每天重置）</div>
+          <div class="quest-list" id="quest-list"></div>
+          <div class="achievement-title">🏆 成就</div>
+          <div class="achievement-list" id="achievement-list"></div>
+        </div>
+
+        <!-- Actions -->
+        <div class="action-panel">
+          <button class="next-day-btn" id="next-day-btn">🌅 結束今天</button>
+          <button class="reset-btn"    id="reset-btn">🔄 重置</button>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-panel">
+          <div class="stats-title">📊 統計</div>
+          <div id="stats-content"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-emo"   id="modal-emo"></div>
+      <h2 class="modal-title" id="modal-title"></h2>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-btns" id="modal-btns"></div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
