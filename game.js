@@ -35,7 +35,7 @@ const SFX = (() => {
         o.type = 'sine';
         o.frequency.setValueAtTime(900, c.currentTime);
         o.frequency.exponentialRampToValueAtTime(280, c.currentTime + 0.13);
-        g.gain.setValueAtTime(0.22, c.currentTime);
+        g.gain.setValueAtTime(0.08, c.currentTime);
         g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.16);
         o.start(); o.stop(c.currentTime + 0.16);
       });
