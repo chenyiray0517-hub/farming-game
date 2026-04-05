@@ -1330,6 +1330,32 @@ const REDEEM_CODES = {
     if (!state.pets.activePetId) state.pets.activePetId = 'dragon';
     addLog(`🐉 兌換碼：獲得金龍！`, 'good');
   }},
+  'rayisgood':  { desc:'獲得隨機普通植物 ×15', apply(){
+    const commonCrops = Object.values(CROPS).filter(c => c.rarity === 'common');
+    for (let i = 0; i < 15; i++) {
+      const crop = commonCrops[Math.floor(Math.random() * commonCrops.length)];
+      addToInventory(crop.id, 'normal');
+    }
+    addLog('🎁 兌換碼：獲得 15 個隨機普通植物！', 'good');
+  }},
+  '676767':     { desc:'獲得 6767 💰', apply(){
+    state.coins += 6767;
+    addLog('🎁 兌換碼：獲得 6767💰！', 'good');
+  }},
+  'BC_Oliveira':{ desc:'獲得隨機傳奇植物 ×3', apply(){
+    const legendarycrops = Object.values(CROPS).filter(c => c.rarity === 'legendary');
+    for (let i = 0; i < 3; i++) {
+      const crop = legendarycrops[Math.floor(Math.random() * legendarycrops.length)];
+      addToInventory(crop.id, 'excellent');
+    }
+    addLog('🎁 兌換碼：獲得 3 個隨機傳奇植物！', 'good');
+  }},
+  'stats003':   { desc:'獲得神話植物 ×1', apply(){
+    const mythicCrops = Object.values(CROPS).filter(c => c.rarity === 'mythic');
+    const crop = mythicCrops[Math.floor(Math.random() * mythicCrops.length)];
+    addToInventory(crop.id, 'excellent');
+    addLog(`🎁 兌換碼：獲得 ${crop.emoji} ${crop.name} ×1！`, 'good');
+  }},
 };
 
 function redeemCode(raw) {
