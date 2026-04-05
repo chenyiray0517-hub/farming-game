@@ -411,12 +411,32 @@ const NPCS = {
 // ============================================================
 function generateQuests(day) {
   const d = ((day - 1) % 7) + 1; // vary quests
-  return [
-    { id:'plant',    type:'plant',     desc:`今天種植 ${2+d%3} 格作物`,  target:2+d%3,  reward:{ coins:30, xp:10 },  progress:0, done:false },
-    { id:'harvest',  type:'harvest',   desc:`今天收穫 ${2+d%3} 格作物`,  target:2+d%3,  reward:{ coins:50, xp:20 },  progress:0, done:false },
-    { id:'earn',     type:'earn',      desc:`今天賺取 ${50+d*10} 金幣`,   target:50+d*10,reward:{ xp:25 },            progress:0, done:false },
-    { id:'waterAll', type:'water_all', desc:'替所有作物澆水',              target:1,      reward:{ xp:15 },            progress:0, done:false },
+  // Rotate quest sets so each day feels different
+  const set = ((day - 1) % 3); // 0, 1, or 2
+  const base = [
+    { id:'plant',    type:'plant',     desc:`今天種植 ${2+d%3} 格作物`,   target:2+d%3,   reward:{ coins:30,  xp:10 }, progress:0, done:false },
+    { id:'harvest',  type:'harvest',   desc:`今天收穫 ${2+d%3} 格作物`,   target:2+d%3,   reward:{ coins:50,  xp:20 }, progress:0, done:false },
+    { id:'earn',     type:'earn',      desc:`今天賺取 ${50+d*10} 金幣`,    target:50+d*10, reward:{ xp:25 },            progress:0, done:false },
+    { id:'waterAll', type:'water_all', desc:'替所有作物澆水',               target:1,       reward:{ xp:15 },            progress:0, done:false },
   ];
+  const extras = [
+    // Set 0
+    [
+      { id:'water5',   type:'water',     desc:`今天澆水 ${4+d} 次`,          target:4+d,     reward:{ coins:20,  xp:12 }, progress:0, done:false },
+      { id:'harvest5', type:'harvest',   desc:`今天收穫 ${4+d} 格作物`,      target:4+d,     reward:{ coins:80,  xp:30 }, progress:0, done:false },
+    ],
+    // Set 1
+    [
+      { id:'plant8',   type:'plant',     desc:`今天種植 ${5+d%4} 格作物`,    target:5+d%4,   reward:{ coins:50,  xp:20 }, progress:0, done:false },
+      { id:'earn2',    type:'earn',      desc:`今天賺取 ${120+d*15} 金幣`,   target:120+d*15,reward:{ coins:40,  xp:30 }, progress:0, done:false },
+    ],
+    // Set 2
+    [
+      { id:'water3',   type:'water',     desc:`今天澆水 ${3+d%3} 次`,        target:3+d%3,   reward:{ coins:15,  xp:10 }, progress:0, done:false },
+      { id:'plant5',   type:'plant',     desc:`今天種植 ${3+d%4} 格作物`,    target:3+d%4,   reward:{ coins:35,  xp:15 }, progress:0, done:false },
+    ],
+  ];
+  return [...base, ...extras[set]];
 }
 
 // ============================================================
@@ -764,6 +784,7 @@ function waterTile(idx) {
   addXP(XP_FOR.water, 'water');
   const waterXpBonus = getPetBuffTotal('water_xp', 'amount');
   if (waterXpBonus > 0) addXP(waterXpBonus, 'water_bonus');
+  updateQuestProgress('water', 1);
   checkWaterAllQuest();
   saveGame();
   renderAll();
@@ -1844,6 +1865,7 @@ function _applyWaterToTile(idx, tileEl) {
   addXP(XP_FOR.water, 'water');
   const waterXpBonus = getPetBuffTotal('water_xp', 'amount');
   if (waterXpBonus > 0) addXP(waterXpBonus, 'water_bonus');
+  updateQuestProgress('water', 1);
   tileEl.classList.add('watered');
 }
 
