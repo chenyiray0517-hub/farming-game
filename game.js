@@ -1986,6 +1986,13 @@ function showModal({ emoji = '', title, body, buttons = [] }) {
 
 function hideModal() {
   document.getElementById('modal-overlay').classList.remove('show');
+  // Temporarily block pointer events on the pet-sheet-bg to prevent iOS
+  // ghost-click (fired ~300ms after touch) from accidentally closing the sheet
+  const bg = document.getElementById('pet-sheet-bg');
+  if (bg && bg.classList.contains('show')) {
+    bg.style.pointerEvents = 'none';
+    setTimeout(() => { bg.style.pointerEvents = ''; }, 400);
+  }
 }
 
 // ============================================================
@@ -1998,10 +2005,13 @@ function bindEvents() {
   const farmGrid = document.getElementById('farm-grid');
   farmGrid.addEventListener('mousedown',  startDrag);
   farmGrid.addEventListener('touchstart', startDrag, { passive: false });
+  // touchmove on farmGrid only: touches that started on farmGrid stay tracked
+  // even when finger moves outside, so scrolling in other areas is never blocked
+  farmGrid.addEventListener('touchmove',  moveDrag, { passive: false });
   document.addEventListener('mousemove',  moveDrag);
-  document.addEventListener('touchmove',  moveDrag, { passive: false });
   document.addEventListener('mouseup',    endDrag);
   document.addEventListener('touchend',   endDrag);
+  document.addEventListener('touchcancel', endDrag); // reset if touch interrupted
 
   document.getElementById('next-day-btn').addEventListener('click', advanceDay);
   document.getElementById('reset-btn').addEventListener('click', () => {
@@ -2050,7 +2060,28 @@ function bindEvents() {
   // Pet FAB + sheet
   document.getElementById('pet-fab').addEventListener('click', openPetSheet);
   document.getElementById('pet-sheet-close').addEventListener('click', closePetSheet);
-  document.getElementById('pet-sheet-bg').addEventListener('click', closePetSheet);
+
+  // Pet sheet bg: use touchend (with movement check) + click for desktop.
+  // Avoids "ghost click" on iOS where dismissing a modal fires a stray click
+  // that lands on the bg and accidentally closes the pet sheet.
+  const bgEl = document.getElementById('pet-sheet-bg');
+  let _bgTouchStart = null, _bgTouchHandled = false;
+  bgEl.addEventListener('touchstart', e => {
+    _bgTouchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  }, { passive: true });
+  bgEl.addEventListener('touchend', e => {
+    if (!_bgTouchStart) return;
+    const dx = e.changedTouches[0].clientX - _bgTouchStart.x;
+    const dy = e.changedTouches[0].clientY - _bgTouchStart.y;
+    _bgTouchStart = null;
+    _bgTouchHandled = true;
+    setTimeout(() => { _bgTouchHandled = false; }, 600);
+    if (Math.sqrt(dx * dx + dy * dy) < 15) closePetSheet(); // tap, not scroll
+  });
+  bgEl.addEventListener('click', () => {
+    if (_bgTouchHandled) return; // already handled by touchend
+    closePetSheet();
+  });
 }
 
 // ============================================================
