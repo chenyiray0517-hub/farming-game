@@ -6,7 +6,7 @@
 const CFG = {
   gridSize:      36,
   gridCols:      6,
-  daysPerSeason: 7,
+  daysPerSeason: 60,
   saveKey:       'farmingGame_v2',
   startCoins:    100,
   maxLog:        30,
@@ -23,16 +23,16 @@ const CROPS = {
   pumpkin:     { id:'pumpkin',     name:'南瓜',     emoji:'🎃', seedCost:40,   sellPrice:130,  growDays:7,  seasons:['autumn'],                unlockLevel:1 },
   strawberry:  { id:'strawberry',  name:'草莓',     emoji:'🍓', seedCost:22,   sellPrice:65,   growDays:3,  seasons:['spring'],                unlockLevel:3 },
   corn:        { id:'corn',        name:'玉米',     emoji:'🌽', seedCost:35,   sellPrice:100,  growDays:6,  seasons:['summer'],                unlockLevel:3 },
-  sunflower:   { id:'sunflower',   name:'向日葵',   emoji:'🌻', seedCost:55,   sellPrice:180,  growDays:10, seasons:null,                     unlockLevel:3 },
-  watermelon:  { id:'watermelon',  name:'西瓜',     emoji:'🍉', seedCost:60,   sellPrice:200,  growDays:9,  seasons:['summer'],                unlockLevel:5 },
-  mushroom:    { id:'mushroom',    name:'蘑菇',     emoji:'🍄', seedCost:45,   sellPrice:140,  growDays:5,  seasons:['autumn'],                unlockLevel:5 },
-  grape:       { id:'grape',       name:'葡萄',     emoji:'🍇', seedCost:70,   sellPrice:250,  growDays:12, seasons:['autumn'],                unlockLevel:5 },
+  sunflower:   { id:'sunflower',   name:'向日葵',   emoji:'🌻', seedCost:55,   sellPrice:180,  growDays:10, seasons:null,        unlockLevel:3,  alwaysExcellent:true },
+  watermelon:  { id:'watermelon',  name:'西瓜',     emoji:'🍉', seedCost:60,   sellPrice:200,  growDays:9,  seasons:['summer'],  unlockLevel:5,  alwaysExcellent:true },
+  mushroom:    { id:'mushroom',    name:'蘑菇',     emoji:'🍄', seedCost:45,   sellPrice:140,  growDays:5,  seasons:['autumn'],  unlockLevel:5,  alwaysExcellent:true },
+  grape:       { id:'grape',       name:'葡萄',     emoji:'🍇', seedCost:70,   sellPrice:250,  growDays:12, seasons:['autumn'],  unlockLevel:5,  alwaysExcellent:true },
   // ── 珍稀 (Lv.7) ────────────────────────────────────────────────
-  peach:       { id:'peach',       name:'水蜜桃',   emoji:'🍑', seedCost:140,  sellPrice:460,  growDays:15, seasons:['spring'],  unlockLevel:7  },
+  peach:       { id:'peach',       name:'水蜜桃',   emoji:'🍑', seedCost:140,  sellPrice:460,  growDays:15, seasons:['spring'],  unlockLevel:7,  alwaysExcellent:true },
   // ── 稀有 (Lv.10) ───────────────────────────────────────────────
-  coconut:     { id:'coconut',     name:'椰子',     emoji:'🥥', seedCost:300,  sellPrice:950,  growDays:20, seasons:['summer'],  unlockLevel:10 },
+  coconut:     { id:'coconut',     name:'椰子',     emoji:'🥥', seedCost:300,  sellPrice:950,  growDays:20, seasons:['summer'],  unlockLevel:10, alwaysExcellent:true },
   // ── 傳說 (Lv.15) ───────────────────────────────────────────────
-  lotus:       { id:'lotus',       name:'蓮花',     emoji:'🪷', seedCost:500,  sellPrice:1600, growDays:22, seasons:null,        unlockLevel:15 },
+  lotus:       { id:'lotus',       name:'蓮花',     emoji:'🪷', seedCost:500,  sellPrice:1600, growDays:22, seasons:null,        unlockLevel:15, alwaysExcellent:true },
 };
 
 // ============================================================
@@ -78,7 +78,7 @@ const PETS = {
                  buffDesc:'所有 XP +50%，出售收入 +25%',
                  buff:{ type:'legendary_unicorn', xp_pct:0.50, sell_pct:0.25 } },
   dragon:      { id:'dragon',      name:'金龍',    emoji:'🐉', rarity:'legendary', weight:3,
-                 buffDesc:'每天 +50💰，收穫必為極品',
+                 buffDesc:'每天 +50💰，收穫必為高級',
                  buff:{ type:'legendary_dragon', daily_coins:50 } },
 };
 
@@ -160,18 +160,34 @@ function getSeasonByDay(day) {
 // 4. LEVEL CONFIG
 // ============================================================
 const LEVELS = [
-  { level:1,  xp:0,     title:'新農夫' },
-  { level:2,  xp:100,   title:'見習農' },
-  { level:3,  xp:300,   title:'老農',      unlocks:['strawberry','corn','sunflower'] },
-  { level:4,  xp:600,   title:'農場工' },
-  { level:5,  xp:1000,  title:'農場主',    unlocks:['watermelon','mushroom','grape'] },
-  { level:6,  xp:1500,  title:'農業師' },
-  { level:7,  xp:2500,  title:'資深農師',  unlocks:['peach'] },
-  { level:8,  xp:3500,  title:'農業專家' },
-  { level:10, xp:6000,  title:'農業宗師',  unlocks:['coconut'] },
-  { level:12, xp:9000,  title:'農業大師' },
-  { level:15, xp:15000, title:'神農',      unlocks:['lotus'] },
-  { level:20, xp:30000, title:'傳說農夫' },
+  { level:1,  xp:0,      title:'新農夫' },
+  { level:2,  xp:100,    title:'見習農' },
+  { level:3,  xp:300,    title:'老農',      unlocks:['strawberry','corn','sunflower'] },
+  { level:4,  xp:600,    title:'農場工' },
+  { level:5,  xp:1000,   title:'農場主',    unlocks:['watermelon','mushroom','grape'] },
+  { level:6,  xp:1500,   title:'農業師' },
+  { level:7,  xp:2500,   title:'資深農師',  unlocks:['peach'] },
+  { level:8,  xp:3500,   title:'農業專家' },
+  { level:9,  xp:5000,   title:'農業達人' },
+  { level:10, xp:7000,   title:'農業宗師',  unlocks:['coconut'] },
+  { level:11, xp:9500,   title:'農地領主' },
+  { level:12, xp:12000,  title:'農業大師' },
+  { level:13, xp:15000,  title:'農耕先鋒' },
+  { level:14, xp:18500,  title:'豐收之王' },
+  { level:15, xp:22500,  title:'神農',      unlocks:['lotus'] },
+  { level:16, xp:27000,  title:'大地守護者' },
+  { level:17, xp:32000,  title:'四季農仙' },
+  { level:18, xp:38000,  title:'穀物聖者' },
+  { level:19, xp:45000,  title:'萬物耕者' },
+  { level:20, xp:53000,  title:'傳說農夫' },
+  { level:22, xp:65000,  title:'天地農神' },
+  { level:25, xp:85000,  title:'自然之主' },
+  { level:28, xp:110000, title:'豐饒使者' },
+  { level:30, xp:140000, title:'農耕傳說' },
+  { level:33, xp:180000, title:'大地之靈' },
+  { level:35, xp:225000, title:'萬古農仙' },
+  { level:38, xp:280000, title:'創世農神' },
+  { level:40, xp:350000, title:'永恆神農' },
 ];
 
 const XP_FOR = { plant:5, water:2, harvest:15, quest:50, login:10 };
@@ -289,6 +305,7 @@ function freshState() {
       newPets:     false,
       feeding:     {},    // { petId: fedCount } — reset each day
     },
+    usedCodes: [],
   };
 }
 
@@ -318,6 +335,7 @@ function loadGame() {
     if (!s.pets.myPets)   s.pets.myPets   = [];
     if (!s.pets.feeding)  s.pets.feeding  = {};
     if (!s.pets.dailyPets) s.pets.dailyPets = [];
+    if (!s.usedCodes) s.usedCodes = [];
     // migrate: old single-pet activePetId → myPets array
     if (s.pets.activePetId && s.pets.myPets.length === 0) {
       s.pets.myPets = [{ petId: s.pets.activePetId }];
@@ -598,7 +616,7 @@ function harvestTile(idx, silent = false) {
 
   // Determine quality
   let quality = 'normal';
-  if (hasPetBuff('legendary_dragon') || state.weatherEffect === 'coin_x2') {
+  if (crop.alwaysExcellent || hasPetBuff('legendary_dragon') || state.weatherEffect === 'coin_x2') {
     quality = 'excellent';
   } else {
     let goodChance = (state.season === 'autumn') ? 0.3 : 0;
@@ -631,7 +649,7 @@ function harvestTile(idx, silent = false) {
   updateQuestProgress('harvest', 1);
   addXP(XP_FOR.harvest, 'harvest');
 
-  const qualLabel = quality === 'excellent' ? '✨ 極品' : quality === 'good' ? '⭐ 優良' : '';
+  const qualLabel = quality === 'excellent' ? '✨ 高級' : quality === 'good' ? '⭐ 優良' : '';
   addLog(`🌾 收穫 ${crop.emoji} ${crop.name} ${qualLabel}→ 進倉庫`, 'good');
 
   state.grid[idx] = emptyTile();
@@ -695,7 +713,7 @@ function doAdvanceDay() {
     addLog(`🌫️ 濃霧！今天生長速度減半`, 'warn');
   }
   if (state.weatherEffect === 'coin_x2') {
-    addLog(`🌈 出現彩虹！今天收穫品質提升為極品`, 'good');
+    addLog(`🌈 出現彩虹！今天收穫品質提升為高級`, 'good');
   }
 
   // Track summary
@@ -1044,7 +1062,7 @@ function renderInventory() {
   state.inventory.forEach(item => {
     const slot = document.createElement('div');
     slot.className = 'inv-slot';
-    slot.title = `${item.name}（${item.quality === 'excellent' ? '極品' : item.quality === 'good' ? '優良' : '普通'}）\n出售價：${item.sellPrice}💰 × ${item.quantity}`;
+    slot.title = `${item.name}（${item.quality === 'excellent' ? '高級' : item.quality === 'good' ? '優良' : '普通'}）\n出售價：${item.sellPrice}💰 × ${item.quantity}`;
 
     const dot = document.createElement('div');
     dot.className = `quality-dot ${item.quality}`;
@@ -1065,7 +1083,7 @@ function renderInventory() {
 }
 
 function showSellModal(item) {
-  const qualLabel = item.quality === 'excellent' ? '✨ 極品' : item.quality === 'good' ? '⭐ 優良' : '普通';
+  const qualLabel = item.quality === 'excellent' ? '✨ 高級' : item.quality === 'good' ? '⭐ 優良' : '普通';
   showModal({
     emoji: item.emoji,
     title: item.name,
@@ -1076,6 +1094,66 @@ function showSellModal(item) {
       { text:'保留',                                         cls:'mbtn-cancel',  cb: hideModal },
     ],
   });
+}
+
+// ============================================================
+// REDEEM CODES
+// ============================================================
+const REDEEM_CODES = {
+  'ray0030517': { desc:'獲得 200 💰', apply(){ state.coins += 200; addLog('🎁 兌換碼：獲得 200💰！', 'good'); } },
+  'BC_Moon':    { desc:'獲得隨機普通寵物 + 稀有寵物', apply(){
+    const commons     = Object.values(PETS).filter(p => p.rarity === 'common');
+    const rares       = Object.values(PETS).filter(p => p.rarity === 'rare');
+    const commonPet   = commons[Math.floor(Math.random() * commons.length)];
+    const rarePet     = rares [Math.floor(Math.random() * rares.length)];
+    [commonPet, rarePet].forEach(pet => {
+      if (state.pets.myPets.length < 5 && !state.pets.myPets.some(p => p.petId === pet.id)) {
+        state.pets.myPets.push({ petId: pet.id });
+        if (!state.pets.activePetId) state.pets.activePetId = pet.id;
+        addLog(`🐾 兌換碼：獲得 ${pet.emoji} ${pet.name}！`, 'good');
+      } else {
+        addLog(`🐾 兌換碼：${pet.emoji} ${pet.name} 已加入（若滿員請先放生）`, 'warn');
+      }
+    });
+  }},
+  'Bad_Bacon':  { desc:'獲得高級植物 ×15', apply(){
+    const excellentCrops = Object.values(CROPS).filter(c => c.alwaysExcellent);
+    const crop = excellentCrops[Math.floor(Math.random() * excellentCrops.length)];
+    for (let i = 0; i < 15; i++) addToInventory(crop.id, 'excellent');
+    addLog(`🎁 兌換碼：獲得 ${crop.emoji} ${crop.name} 高級 ×15！`, 'good');
+  }},
+  'goldgragon': { desc:'獲得金龍 🐉', apply(){
+    const pet = PETS['dragon'];
+    if (state.pets.myPets.some(p => p.petId === 'dragon')) {
+      addLog('🐉 你已經擁有金龍了！', 'warn'); return;
+    }
+    if (state.pets.myPets.length >= 5) {
+      addLog('🐉 寵物已滿 5 隻，請先放生一隻！', 'warn'); return;
+    }
+    state.pets.myPets.push({ petId: 'dragon' });
+    if (!state.pets.activePetId) state.pets.activePetId = 'dragon';
+    addLog(`🐉 兌換碼：獲得金龍！`, 'good');
+  }},
+};
+
+function redeemCode(raw) {
+  const code = raw.trim();
+  if (!code) return;
+  if (!state.usedCodes) state.usedCodes = [];
+  if (state.usedCodes.includes(code)) {
+    showModal({ emoji:'⚠️', title:'兌換失敗', body:'此兌換碼已使用過了！', buttons:[{ text:'確定', cls:'mbtn-cancel', cb:hideModal }] });
+    return;
+  }
+  const entry = REDEEM_CODES[code];
+  if (!entry) {
+    showModal({ emoji:'❌', title:'無效兌換碼', body:'兌換碼不正確，請確認後再試。', buttons:[{ text:'確定', cls:'mbtn-cancel', cb:hideModal }] });
+    return;
+  }
+  state.usedCodes.push(code);
+  entry.apply();
+  saveGame();
+  renderAll();
+  showModal({ emoji:'🎁', title:'兌換成功！', body:`<strong>${code}</strong><br>${entry.desc}`, buttons:[{ text:'太好了！', cls:'mbtn-ok', cb:hideModal }] });
 }
 
 function renderQuests() {
@@ -1114,6 +1192,12 @@ function renderQuests() {
     `;
     achList.appendChild(el);
   });
+
+  // Redeem codes
+  const redeemEl = document.getElementById('redeem-section');
+  if (redeemEl) {
+    redeemEl.querySelector('.redeem-input').value = '';
+  }
 }
 
 // ── Pet Panel ───────────────────────────────────────────────────────
@@ -1188,7 +1272,7 @@ function renderPets() {
     const done    = fed >= target;
     const pct     = Math.min(fed / target * 100, 100).toFixed(0);
     const reqNote = pet.rarity === 'legendary'
-      ? `需餵 ${target} 個 ✨極品農作`
+      ? `需餵 ${target} 個 ✨高級農作`
       : `需餵 ${target} 個農作物`;
 
     html += `
@@ -1272,13 +1356,13 @@ function showFeedModal(petId) {
       </div>
     </div>
   `;
-  if (isLegendary) body += `<div class="srow" style="color:#e65100;font-size:.8rem">⚠️ 傳奇寵物只接受 ✨極品農作</div>`;
+  if (isLegendary) body += `<div class="srow" style="color:#e65100;font-size:.8rem">⚠️ 傳奇寵物只接受 ✨高級農作</div>`;
   body += `<div class="srow" style="color:#7a5a40">倉庫中可用：${totalAvail} 個</div>`;
 
   if (totalAvail === 0) {
     showModal({
       emoji: pet.emoji, title: `餵食 ${pet.name}`,
-      body: body + `<div class="srow" style="color:#c62828">倉庫沒有${isLegendary ? '極品' : ''}農作物！先去收穫吧。</div>`,
+      body: body + `<div class="srow" style="color:#c62828">倉庫沒有${isLegendary ? '高級' : ''}農作物！先去收穫吧。</div>`,
       buttons: [{ text:'關閉', cls:'mbtn-cancel', cb: hideModal }],
     });
     return;
@@ -1316,7 +1400,7 @@ function doFeedPet(petId, qty) {
 
   const consumed = toUse - left;
   if (consumed === 0) {
-    addLog(`⚠️ 倉庫中沒有${isLegendary ? '極品' : ''}農作物！`);
+    addLog(`⚠️ 倉庫中沒有${isLegendary ? '高級' : ''}農作物！`);
     saveGame(); renderAll(); renderPets(); return;
   }
 
@@ -1690,6 +1774,13 @@ function bindEvents() {
         { text:'取消', cls:'mbtn-cancel', cb: hideModal },
       ],
     });
+  });
+
+  document.getElementById('redeem-btn').addEventListener('click', () => {
+    redeemCode(document.getElementById('redeem-input').value);
+  });
+  document.getElementById('redeem-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') redeemCode(document.getElementById('redeem-input').value);
   });
 
   document.getElementById('sell-all-btn').addEventListener('click', () => {

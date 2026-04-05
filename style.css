@@ -136,7 +136,9 @@ body {
 
 .tile.empty   { background: var(--soil-light); }
 .tile.planted { background: var(--soil-med); }
+.tile.planted.watered { background: #2a6a9a; }
 .tile.growing { background: #6a9a4a; }
+.tile.growing.watered { background: #2a7a6a; }
 .tile.ready   { background: var(--green); border-color: var(--gold); animation: tpulse 1.3s ease-in-out infinite; }
 .tile.wilted  { background: #7a5a3a; filter: saturate(.35); }
 
@@ -517,6 +519,42 @@ body[data-tool="harvest"] .tile.ready:hover   { border-color: #fff; }
 .stat-row:last-child { border-bottom: none; }
 .stat-val { font-weight: 700; color: var(--text); }
 
+.redeem-section {
+  background: var(--panel-bg);
+  border-radius: 10px;
+  border: 1px solid var(--panel-bdr);
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+.redeem-row { display: flex; gap: 6px; margin-top: 6px; }
+.redeem-input {
+  flex: 1; min-width: 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--panel-bdr);
+  background: rgba(255,255,255,.07);
+  color: var(--text);
+  font-size: .78rem;
+  font-family: inherit;
+  outline: none;
+}
+.redeem-input::placeholder { color: var(--text-dim); }
+.redeem-input:focus { border-color: rgba(255,215,0,.5); }
+.redeem-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(100,200,100,.35);
+  background: rgba(76,175,80,.2);
+  color: #a5d6a7;
+  font-size: .78rem;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  min-height: 36px;
+  transition: background .14s;
+}
+.redeem-btn:active { background: rgba(76,175,80,.4); }
+
 .action-panel { padding-bottom: 16px; }
 .reset-btn {
   width: 100%; padding: 10px;
@@ -596,18 +634,17 @@ body[data-tool="harvest"] .tile.ready:hover   { border-color: #fff; }
 
 /* ── Pet FAB button ── */
 .pet-fab {
-  position: fixed;
-  right: 16px;
-  bottom: 72px;       /* above tab bar */
-  width: 52px;
-  height: 52px;
+  position: relative;   /* mobile: inline inside HUD row */
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   border: none;
   background: linear-gradient(135deg, #4caf50, #2e7d32);
   color: #fff;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0,0,0,.4);
+  box-shadow: 0 2px 8px rgba(0,0,0,.4);
   z-index: 40;
   display: flex;
   align-items: center;
@@ -615,7 +652,7 @@ body[data-tool="harvest"] .tile.ready:hover   { border-color: #fff; }
   transition: transform .15s, box-shadow .15s;
   -webkit-tap-highlight-color: transparent;
 }
-.pet-fab:active { transform: scale(.9); box-shadow: 0 2px 8px rgba(0,0,0,.4); }
+.pet-fab:active { transform: scale(.9); box-shadow: 0 1px 4px rgba(0,0,0,.4); }
 
 /* New-pet red dot on FAB */
 .pet-fab-dot {
@@ -1018,4 +1055,15 @@ body[data-tool="harvest"] .tile.ready:hover   { border-color: #fff; }
   }
 
   .inv-grid { grid-template-columns: repeat(4, 1fr); }
+
+  /* desktop: restore pet FAB to fixed floating button */
+  .pet-fab {
+    position: fixed;
+    right: 16px;
+    bottom: 72px;
+    width: 52px;
+    height: 52px;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,.4);
+  }
 }

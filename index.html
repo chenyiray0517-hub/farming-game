@@ -26,6 +26,7 @@
           <div class="xp-bar"><div class="xp-fill" id="xp-fill"></div></div>
           <span class="xp-text" id="xp-text">0/100 XP</span>
         </div>
+        <button class="pet-fab" id="pet-fab">🐾<span class="pet-fab-dot hidden" id="pet-fab-dot"></span></button>
       </div>
     </div>
 
@@ -94,6 +95,15 @@
           <div class="quest-list" id="quest-list"></div>
           <div class="achievement-title">🏆 成就</div>
           <div class="achievement-list" id="achievement-list"></div>
+          <!-- Redeem codes -->
+          <div class="redeem-section" id="redeem-section">
+            <div class="stats-title">🎁 兌換碼</div>
+            <div class="redeem-row">
+              <input class="redeem-input" id="redeem-input" type="text" placeholder="輸入兌換碼…" autocomplete="off" />
+              <button class="redeem-btn" id="redeem-btn">兌換</button>
+            </div>
+          </div>
+
           <!-- Stats & Reset (tucked inside quests) -->
           <div class="stats-panel">
             <div class="stats-title">📊 統計</div>
@@ -110,9 +120,6 @@
     </div><!-- /main-area -->
 
   </div><!-- /game-wrapper -->
-
-  <!-- ── Pet FAB button ── -->
-  <button class="pet-fab" id="pet-fab">🐾<span class="pet-fab-dot hidden" id="pet-fab-dot"></span></button>
 
   <!-- ── Pet Bottom Sheet ── -->
   <div class="pet-sheet-bg" id="pet-sheet-bg"></div>
