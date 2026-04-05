@@ -90,17 +90,24 @@ body {
 }
 
 .farm-side {
-  flex-shrink: 0;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
+  /* Cap farm section to ~42% of viewport so bottom panel gets plenty of room */
+  max-height: 42vh;
+  max-height: 42dvh;
 }
 
 /* ═══════════════════════════════════════
-   FARM — grows to fill available space
+   FARM — scrollable container on mobile
    ═══════════════════════════════════════ */
 .farm-container {
-  flex-shrink: 0;
-  padding: 8px 10px 4px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 6px 8px 2px;
 }
 
 .farm-grid {
@@ -387,6 +394,10 @@ body[data-tool="harvest"] .tile.ready:hover   { border-color: #fff; }
    SEED LIST
    ═══════════════════════════════════════ */
 .seed-list { display: flex; flex-direction: column; gap: 5px; }
+.shop-rarity-header {
+  font-size: .65rem; font-weight: 700; letter-spacing: 1px;
+  text-align: center; opacity: .75; margin: 6px 0 2px;
+}
 
 .seed-btn {
   width: 100%;
@@ -829,6 +840,7 @@ body[data-tool="harvest"] .tile.ready:hover   { border-color: #fff; }
 .rarity-common    { color: #ccc;    background: rgba(170,170,170,.2); border: 1px solid rgba(170,170,170,.4); }
 .rarity-rare      { color: #90caf9; background: rgba(100,181,246,.2); border: 1px solid rgba(100,181,246,.5); }
 .rarity-legendary { color: var(--gold); background: rgba(255,215,0,.15); border: 1px solid rgba(255,215,0,.5); }
+.rarity-mythic    { color: #f48fb1; background: rgba(224,64,251,.18); border: 1px solid rgba(224,64,251,.6); }
 
 /* ── Daily pet cards ── */
 .pet-daily-list { display: flex; flex-direction: column; gap: 10px; }
@@ -845,10 +857,15 @@ body[data-tool="harvest"] .tile.ready:hover   { border-color: #fff; }
 .rarity-border-common    { border-color: rgba(170,170,170,.3); }
 .rarity-border-rare      { border-color: rgba(100,181,246,.4); background: rgba(100,181,246,.06); }
 .rarity-border-legendary { border-color: rgba(255,215,0,.5);   background: rgba(255,215,0,.08); animation: legendaryGlow 2s ease-in-out infinite; }
+.rarity-border-mythic    { border-color: rgba(224,64,251,.7);  background: rgba(224,64,251,.10); animation: mythicGlow 2s ease-in-out infinite; }
 
 @keyframes legendaryGlow {
   0%,100% { box-shadow: 0 0 10px rgba(255,215,0,.18); }
   50%     { box-shadow: 0 0 22px rgba(255,215,0,.45); }
+}
+@keyframes mythicGlow {
+  0%,100% { box-shadow: 0 0 12px rgba(224,64,251,.25); }
+  50%     { box-shadow: 0 0 28px rgba(224,64,251,.65); }
 }
 
 /* Card top row */
@@ -987,9 +1004,13 @@ body[data-tool="harvest"] .tile.ready:hover   { border-color: #fff; }
   .farm-side {
     flex: 1;
     min-width: 0;
+    max-height: none; /* remove mobile cap */
   }
 
-  .farm-container { padding: 0; }
+  .farm-container {
+    overflow-y: visible;
+    padding: 0;
+  }
 
   /* log strip → full scrollable log on desktop */
   .log-strip {
