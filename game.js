@@ -1,6 +1,93 @@
 'use strict';
 
 // ============================================================
+// 0. SOUND EFFECTS  (Web Audio API — no audio files needed)
+// ============================================================
+const SFX = (() => {
+  let ctx = null;
+  function getCtx() {
+    if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // Resume on iOS which auto-suspends AudioContext
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+  function safe(fn) { try { fn(getCtx()); } catch(e) {} }
+
+  return {
+    // 🌱 種植：低沉短促的土壤聲
+    plant() {
+      safe(c => {
+        const o = c.createOscillator(), g = c.createGain();
+        o.connect(g); g.connect(c.destination);
+        o.type = 'sine';
+        o.frequency.setValueAtTime(200, c.currentTime);
+        o.frequency.exponentialRampToValueAtTime(100, c.currentTime + 0.14);
+        g.gain.setValueAtTime(0.28, c.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.18);
+        o.start(); o.stop(c.currentTime + 0.18);
+      });
+    },
+    // 💧 澆水：水滴滴落聲（高→低）
+    water() {
+      safe(c => {
+        const o = c.createOscillator(), g = c.createGain();
+        o.connect(g); g.connect(c.destination);
+        o.type = 'sine';
+        o.frequency.setValueAtTime(900, c.currentTime);
+        o.frequency.exponentialRampToValueAtTime(280, c.currentTime + 0.13);
+        g.gain.setValueAtTime(0.22, c.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.16);
+        o.start(); o.stop(c.currentTime + 0.16);
+      });
+    },
+    // 🌾 收穫：歡快雙音叮噹
+    harvest() {
+      safe(c => {
+        [[523, 0], [784, 0.09]].forEach(([freq, delay]) => {
+          const o = c.createOscillator(), g = c.createGain();
+          o.connect(g); g.connect(c.destination);
+          o.type = 'triangle';
+          o.frequency.setValueAtTime(freq, c.currentTime + delay);
+          g.gain.setValueAtTime(0.28, c.currentTime + delay);
+          g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + delay + 0.28);
+          o.start(c.currentTime + delay);
+          o.stop(c.currentTime + delay + 0.28);
+        });
+      });
+    },
+    // 💰 賣出：金幣叮一聲
+    sell() {
+      safe(c => {
+        const o = c.createOscillator(), g = c.createGain();
+        o.connect(g); g.connect(c.destination);
+        o.type = 'triangle';
+        o.frequency.setValueAtTime(1400, c.currentTime);
+        o.frequency.exponentialRampToValueAtTime(900, c.currentTime + 0.12);
+        g.gain.setValueAtTime(0.32, c.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.2);
+        o.start(); o.stop(c.currentTime + 0.2);
+      });
+    },
+    // 🐾 餵養：咀嚼短噪聲
+    feed() {
+      safe(c => {
+        const len = Math.floor(c.sampleRate * 0.09);
+        const buf = c.createBuffer(1, len, c.sampleRate);
+        const d   = buf.getChannelData(0);
+        for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len) * 0.9;
+        const src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+        f.type = 'bandpass'; f.frequency.value = 500; f.Q.value = 1.5;
+        src.buffer = buf;
+        src.connect(f); f.connect(g); g.connect(c.destination);
+        g.gain.setValueAtTime(0.38, c.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.11);
+        src.start(); src.stop(c.currentTime + 0.11);
+      });
+    },
+  };
+})();
+
+// ============================================================
 // 1. CONFIG
 // ============================================================
 const CFG = {
@@ -692,6 +779,7 @@ function sellInventoryItem(cropId, quality, qty = 1) {
   if (item.quantity <= 0) {
     state.inventory = state.inventory.filter(i => !(i.cropId === cropId && i.quality === quality));
   }
+  SFX.sell();
   addLog(`💰 出售 ${CROPS[cropId].emoji} ${CROPS[cropId].name} ×${sellQty}，獲得 ${earned}💰`, 'good');
   checkAchievements();
   saveGame();
@@ -711,6 +799,7 @@ function sellAllInventory() {
   state.coins += totalEarned;
   updateQuestProgress('earn', totalEarned);
   state.inventory = [];
+  SFX.sell();
   addLog(`💰 全部出售！共獲得 ${totalEarned}💰`, 'good');
   checkAchievements();
   saveGame();
@@ -759,6 +848,7 @@ function plantSeed(idx) {
   tile.isReady   = false;
   tile.hp        = 100;
 
+  SFX.plant();
   state.stats.totalPlanted++;
   updateQuestProgress('plant', 1);
   addXP(XP_FOR.plant, 'plant');
@@ -772,6 +862,7 @@ function waterTile(idx) {
   if (!['planted','growing','wilted'].includes(tile.state)) { addLog('⚠️ 只能對已種植的作物澆水！'); return; }
   if (tile.watered) { addLog('⚠️ 今天已澆過水了！'); return; }
 
+  SFX.water();
   tile.watered = true;
   if (tile.state === 'wilted') {
     tile.state      = tile.growthDay > 0 ? 'growing' : 'planted';
@@ -810,6 +901,7 @@ function harvestTile(idx, silent = false) {
     if (Math.random() < goodChance) quality = 'good';
   }
 
+  SFX.harvest();
   addToInventory(tile.crop, quality);
 
   // Pet: double harvest — stack chances, cap at 95%
@@ -1647,6 +1739,7 @@ function doFeedPet(petId, qty) {
     saveGame(); renderAll(); renderPets(); return;
   }
 
+  SFX.feed();
   state.pets.feeding[petId] = fed + consumed;
   const newFed = state.pets.feeding[petId];
   addLog(`🌾 餵食 ${pet.emoji}${pet.name} ${consumed} 個（${newFed}/${target}）`, 'good');
@@ -1853,6 +1946,7 @@ function _applyWaterToTile(idx, tileEl) {
   const tile = state.grid[idx];
   if (!['planted', 'growing', 'wilted'].includes(tile.state)) { _draggedTiles.add(idx); return; }
   if (tile.watered) { _draggedTiles.add(idx); return; }
+  SFX.water();
   tile.watered = true;
   _draggedTiles.add(idx);
   if (tile.state === 'wilted') {
@@ -1895,6 +1989,7 @@ function _applyPlantToTile(idx, tileEl) {
     addLog(`🌱 種下 ${crop.emoji} ${crop.name}（-${actualCost}💰${discountNote}）`);
   }
 
+  SFX.plant();
   tile.state      = 'planted';
   tile.crop       = state.selectedSeed;
   tile.growthDay  = 0;
