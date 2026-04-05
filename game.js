@@ -22,7 +22,7 @@ const SFX = (() => {
         o.type = 'sine';
         o.frequency.setValueAtTime(200, c.currentTime);
         o.frequency.exponentialRampToValueAtTime(100, c.currentTime + 0.14);
-        g.gain.setValueAtTime(0.28, c.currentTime);
+        g.gain.setValueAtTime(0.5, c.currentTime);
         g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.18);
         o.start(); o.stop(c.currentTime + 0.18);
       });
@@ -48,7 +48,7 @@ const SFX = (() => {
           o.connect(g); g.connect(c.destination);
           o.type = 'triangle';
           o.frequency.setValueAtTime(freq, c.currentTime + delay);
-          g.gain.setValueAtTime(0.28, c.currentTime + delay);
+          g.gain.setValueAtTime(0.1, c.currentTime + delay);
           g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + delay + 0.28);
           o.start(c.currentTime + delay);
           o.stop(c.currentTime + delay + 0.28);
