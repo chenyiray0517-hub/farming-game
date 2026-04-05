@@ -15,71 +15,149 @@ const CFG = {
 // ============================================================
 // 2. CROP DEFINITIONS
 // ============================================================
+const CROP_RARITY_LABEL = { common:'普通', rare:'稀有', premium:'高級', legendary:'傳奇', mythic:'神話' };
+const CROP_RARITY_COLOR = { common:'#ccc', rare:'#64b5f6', premium:'#81c784', legendary:'#ffd700', mythic:'#e040fb' };
+
 const CROPS = {
-  // ── 普通 (Lv.1–5) ──────────────────────────────────────────────
-  radish:      { id:'radish',      name:'蘿蔔',     emoji:'🥬', seedCost:10,   sellPrice:28,   growDays:2,  seasons:null,                     unlockLevel:1 },
-  carrot:      { id:'carrot',      name:'胡蘿蔔',   emoji:'🥕', seedCost:18,   sellPrice:50,   growDays:3,  seasons:['spring','autumn'],       unlockLevel:1 },
-  tomato:      { id:'tomato',      name:'番茄',     emoji:'🍅', seedCost:28,   sellPrice:80,   growDays:5,  seasons:['summer'],                unlockLevel:1 },
-  pumpkin:     { id:'pumpkin',     name:'南瓜',     emoji:'🎃', seedCost:40,   sellPrice:130,  growDays:7,  seasons:['autumn'],                unlockLevel:1 },
-  strawberry:  { id:'strawberry',  name:'草莓',     emoji:'🍓', seedCost:22,   sellPrice:65,   growDays:3,  seasons:['spring'],                unlockLevel:3 },
-  corn:        { id:'corn',        name:'玉米',     emoji:'🌽', seedCost:35,   sellPrice:100,  growDays:6,  seasons:['summer'],                unlockLevel:3 },
-  sunflower:   { id:'sunflower',   name:'向日葵',   emoji:'🌻', seedCost:55,   sellPrice:180,  growDays:10, seasons:null,        unlockLevel:3,  alwaysExcellent:true },
-  watermelon:  { id:'watermelon',  name:'西瓜',     emoji:'🍉', seedCost:60,   sellPrice:200,  growDays:9,  seasons:['summer'],  unlockLevel:5,  alwaysExcellent:true },
-  mushroom:    { id:'mushroom',    name:'蘑菇',     emoji:'🍄', seedCost:45,   sellPrice:140,  growDays:5,  seasons:['autumn'],  unlockLevel:5,  alwaysExcellent:true },
-  grape:       { id:'grape',       name:'葡萄',     emoji:'🍇', seedCost:70,   sellPrice:250,  growDays:12, seasons:['autumn'],  unlockLevel:5,  alwaysExcellent:true },
-  // ── 珍稀 (Lv.7) ────────────────────────────────────────────────
-  peach:       { id:'peach',       name:'水蜜桃',   emoji:'🍑', seedCost:140,  sellPrice:460,  growDays:15, seasons:['spring'],  unlockLevel:7,  alwaysExcellent:true },
-  // ── 稀有 (Lv.10) ───────────────────────────────────────────────
-  coconut:     { id:'coconut',     name:'椰子',     emoji:'🥥', seedCost:300,  sellPrice:950,  growDays:20, seasons:['summer'],  unlockLevel:10, alwaysExcellent:true },
-  // ── 傳說 (Lv.15) ───────────────────────────────────────────────
-  lotus:       { id:'lotus',       name:'蓮花',     emoji:'🪷', seedCost:500,  sellPrice:1600, growDays:22, seasons:null,        unlockLevel:15, alwaysExcellent:true },
+  // ── 普通 ────────────────────────────────────────────────────────
+  broccoli:    { id:'broccoli',    name:'花椰菜',   emoji:'🥦', rarity:'common',    seedCost:8,    sellPrice:20,   growDays:2,  seasons:null,                     unlockLevel:1  },
+  radish:      { id:'radish',      name:'蘿蔔',     emoji:'🥬', rarity:'common',    seedCost:10,   sellPrice:28,   growDays:2,  seasons:null,                     unlockLevel:1  },
+  onion:       { id:'onion',       name:'洋蔥',     emoji:'🧅', rarity:'common',    seedCost:14,   sellPrice:38,   growDays:3,  seasons:null,                     unlockLevel:5  },
+  carrot:      { id:'carrot',      name:'胡蘿蔔',   emoji:'🥕', rarity:'common',    seedCost:18,   sellPrice:50,   growDays:3,  seasons:['spring','autumn'],       unlockLevel:10 },
+  cucumber:    { id:'cucumber',    name:'小黃瓜',   emoji:'🥒', rarity:'common',    seedCost:24,   sellPrice:70,   growDays:4,  seasons:['summer'],                unlockLevel:15 },
+  strawberry:  { id:'strawberry',  name:'草莓',     emoji:'🍓', rarity:'common',    seedCost:22,   sellPrice:65,   growDays:3,  seasons:['spring'],                unlockLevel:18 },
+  tomato:      { id:'tomato',      name:'番茄',     emoji:'🍅', rarity:'common',    seedCost:28,   sellPrice:80,   growDays:5,  seasons:['summer'],                unlockLevel:20 },
+  corn:        { id:'corn',        name:'玉米',     emoji:'🌽', rarity:'common',    seedCost:35,   sellPrice:100,  growDays:6,  seasons:['summer'],                unlockLevel:22 },
+  pumpkin:     { id:'pumpkin',     name:'南瓜',     emoji:'🎃', rarity:'common',    seedCost:40,   sellPrice:130,  growDays:7,  seasons:['autumn'],                unlockLevel:25 },
+  // ── 稀有 ────────────────────────────────────────────────────────
+  mushroom:    { id:'mushroom',    name:'蘑菇',     emoji:'🍄', rarity:'rare',      seedCost:45,   sellPrice:140,  growDays:5,  seasons:['autumn'],                unlockLevel:30 },
+  sunflower:   { id:'sunflower',   name:'向日葵',   emoji:'🌻', rarity:'rare',      seedCost:55,   sellPrice:180,  growDays:10, seasons:null,                     unlockLevel:35 },
+  watermelon:  { id:'watermelon',  name:'西瓜',     emoji:'🍉', rarity:'rare',      seedCost:60,   sellPrice:200,  growDays:9,  seasons:['summer'],                unlockLevel:40 },
+  grape:       { id:'grape',       name:'葡萄',     emoji:'🍇', rarity:'rare',      seedCost:70,   sellPrice:250,  growDays:12, seasons:['autumn'],                unlockLevel:45 },
+  cherry:      { id:'cherry',      name:'櫻桃',     emoji:'🍒', rarity:'rare',      seedCost:85,   sellPrice:290,  growDays:11, seasons:['spring'],                unlockLevel:50 },
+  blueberry:   { id:'blueberry',   name:'藍莓',     emoji:'🫐', rarity:'rare',      seedCost:95,   sellPrice:320,  growDays:13, seasons:['summer'],                unlockLevel:55 },
+  // ── 高級（收穫必為高級品質）──────────────────────────────────────
+  peach:       { id:'peach',       name:'水蜜桃',   emoji:'🍑', rarity:'premium',   seedCost:140,  sellPrice:460,  growDays:15, seasons:['spring'],  unlockLevel:60, alwaysExcellent:true },
+  coconut:     { id:'coconut',     name:'椰子',     emoji:'🥥', rarity:'premium',   seedCost:300,  sellPrice:950,  growDays:20, seasons:['summer'],  unlockLevel:65, alwaysExcellent:true },
+  rose:        { id:'rose',        name:'玫瑰',     emoji:'🌹', rarity:'premium',   seedCost:220,  sellPrice:700,  growDays:17, seasons:['spring'],  unlockLevel:70, alwaysExcellent:true },
+  // ── 傳奇（收穫必為高級品質）──────────────────────────────────────
+  lotus:       { id:'lotus',       name:'蓮花',     emoji:'🪷', rarity:'legendary', seedCost:500,  sellPrice:1600, growDays:22, seasons:null,        unlockLevel:75, alwaysExcellent:true },
+  crystalHerb: { id:'crystalHerb', name:'幻晶草',   emoji:'🔮', rarity:'legendary', seedCost:700,  sellPrice:2200, growDays:28, seasons:null,        unlockLevel:80, alwaysExcellent:true },
+  starBlossom: { id:'starBlossom', name:'星辰花',   emoji:'🌠', rarity:'legendary', seedCost:950,  sellPrice:3000, growDays:34, seasons:['winter'],  unlockLevel:85, alwaysExcellent:true },
+  sacredBamboo:{ id:'sacredBamboo',name:'仙竹',     emoji:'🎋', rarity:'legendary', seedCost:1200, sellPrice:4200, growDays:40, seasons:null,        unlockLevel:90, alwaysExcellent:true },
+  // ── 神話（收穫必為高級品質）──────────────────────────────────────
+  rainbowFruit:{ id:'rainbowFruit',name:'彩虹果',   emoji:'🌈', rarity:'mythic',    seedCost:3000, sellPrice:12000,growDays:55, seasons:null,        unlockLevel:100,alwaysExcellent:true },
 };
 
 // ============================================================
 // 2.5  PET DEFINITIONS
 // ============================================================
-// Weight totals: Common 50×10=500, Rare 12×5=60, Legendary 3×2=6 → total 566
-// P(common slot) ≈ 88.3%  P(rare slot) ≈ 10.6%  P(legendary slot) ≈ 1.06%
 const PETS = {
-  // ── Common ──────────────────────────────────────────────────────────
+  // ── Common (weight:50) ──────────────────────────────────────────────
   chick:       { id:'chick',       name:'雞仔',    emoji:'🐔', rarity:'common',    weight:50,
-                 buffDesc:'每次收穫 +5💰',           buff:{ type:'harvest_coins', amount:5 } },
+                 buffDesc:'每次收穫 +5💰',                buff:{ type:'harvest_coins', amount:5 } },
   caterpillar: { id:'caterpillar', name:'毛毛蟲',  emoji:'🐛', rarity:'common',    weight:50,
-                 buffDesc:'每次澆水 +2 XP',          buff:{ type:'water_xp', amount:2 } },
+                 buffDesc:'每次澆水 +2 XP',               buff:{ type:'water_xp', amount:2 } },
   ladybug:     { id:'ladybug',     name:'瓢蟲',    emoji:'🐞', rarity:'common',    weight:50,
-                 buffDesc:'收穫品質提升機率 +15%',    buff:{ type:'quality_chance', bonus:0.15 } },
+                 buffDesc:'收穫品質提升機率 +15%',         buff:{ type:'quality_chance', bonus:0.15 } },
   bee:         { id:'bee',         name:'小蜜蜂',  emoji:'🐝', rarity:'common',    weight:50,
-                 buffDesc:'種子費用 -10%',            buff:{ type:'plant_discount', pct:0.10 } },
+                 buffDesc:'種子費用 -10%',                 buff:{ type:'plant_discount', pct:0.10 } },
   fish:        { id:'fish',        name:'小魚',    emoji:'🐟', rarity:'common',    weight:50,
-                 buffDesc:'每天獲得 +8💰',            buff:{ type:'daily_coins', amount:8 } },
+                 buffDesc:'每天獲得 +8💰',                 buff:{ type:'daily_coins', amount:8 } },
   mouse:       { id:'mouse',       name:'小鼠',    emoji:'🐭', rarity:'common',    weight:50,
-                 buffDesc:'收穫 XP +20%',             buff:{ type:'harvest_xp', pct:0.20 } },
+                 buffDesc:'收穫 XP +20%',                  buff:{ type:'harvest_xp', pct:0.20 } },
   butterfly:   { id:'butterfly',   name:'蝴蝶',    emoji:'🦋', rarity:'common',    weight:50,
-                 buffDesc:'春季收穫額外 +15💰',       buff:{ type:'spring_coins', amount:15 } },
+                 buffDesc:'春季收穫額外 +15💰',            buff:{ type:'spring_coins', amount:15 } },
   turtle:      { id:'turtle',      name:'烏龜',    emoji:'🐢', rarity:'common',    weight:50,
-                 buffDesc:'作物可多耐 1 天缺水',      buff:{ type:'wilt_resist' } },
+                 buffDesc:'作物可多耐 1 天缺水',           buff:{ type:'wilt_resist' } },
   frog:        { id:'frog',        name:'青蛙',    emoji:'🐸', rarity:'common',    weight:50,
-                 buffDesc:'下雨天收穫必為優良品質',   buff:{ type:'rain_quality' } },
+                 buffDesc:'下雨天收穫必為優良品質',        buff:{ type:'rain_quality' } },
   hamster:     { id:'hamster',     name:'倉鼠',    emoji:'🐹', rarity:'common',    weight:50,
-                 buffDesc:'所有出售價格 +8%',         buff:{ type:'sell_bonus', pct:0.08 } },
-  // ── Rare ────────────────────────────────────────────────────────────
+                 buffDesc:'所有出售價格 +8%',              buff:{ type:'sell_bonus', pct:0.08 } },
+  rabbit:      { id:'rabbit',      name:'兔子',    emoji:'🐇', rarity:'common',    weight:50,
+                 buffDesc:'作物每天額外生長 +0.15 天',     buff:{ type:'grow_speed', bonus:0.15 } },
+  squirrel:    { id:'squirrel',    name:'松鼠',    emoji:'🐿️', rarity:'common',    weight:50,
+                 buffDesc:'秋季收穫額外 +18💰',            buff:{ type:'autumn_coins', amount:18 } },
+  duck:        { id:'duck',        name:'小鴨',    emoji:'🦆', rarity:'common',    weight:50,
+                 buffDesc:'下雨天每天額外 +12💰',          buff:{ type:'rain_coins', amount:12 } },
+  rooster:     { id:'rooster',     name:'公雞',    emoji:'🐓', rarity:'common',    weight:50,
+                 buffDesc:'每天開始獲得 +6💰',             buff:{ type:'daily_coins', amount:6 } },
+  sheep:       { id:'sheep',       name:'小羊',    emoji:'🐑', rarity:'common',    weight:50,
+                 buffDesc:'種子費用 -8%',                  buff:{ type:'plant_discount', pct:0.08 } },
+  ant:         { id:'ant',         name:'螞蟻',    emoji:'🐜', rarity:'common',    weight:50,
+                 buffDesc:'每次收穫 +3💰',                 buff:{ type:'harvest_coins', amount:3 } },
+  blowfish:    { id:'blowfish',    name:'河豚',    emoji:'🐡', rarity:'common',    weight:50,
+                 buffDesc:'出售價格 +6%',                  buff:{ type:'sell_bonus', pct:0.06 } },
+  parrot:      { id:'parrot',      name:'鸚鵡',    emoji:'🦜', rarity:'common',    weight:50,
+                 buffDesc:'每次收穫 +3 XP',                buff:{ type:'harvest_xp_flat', amount:3 } },
+  sparrow:     { id:'sparrow',     name:'小麻雀',  emoji:'🐦', rarity:'common',    weight:50,
+                 buffDesc:'每次澆水 +3 XP',                buff:{ type:'water_xp', amount:3 } },
+  cricket:     { id:'cricket',     name:'蟋蟀',    emoji:'🦗', rarity:'common',    weight:50,
+                 buffDesc:'夏季收穫額外 +14💰',            buff:{ type:'summer_coins', amount:14 } },
+  snail:       { id:'snail',       name:'蝸牛',    emoji:'🐌', rarity:'common',    weight:50,
+                 buffDesc:'每次種植 +5 XP',                buff:{ type:'plant_xp', amount:5 } },
+  bear:        { id:'bear',        name:'小熊',    emoji:'🐻', rarity:'common',    weight:50,
+                 buffDesc:'冬季收穫額外 +22💰',            buff:{ type:'winter_coins', amount:22 } },
+  hedgehog:    { id:'hedgehog',    name:'刺蝟',    emoji:'🦔', rarity:'common',    weight:50,
+                 buffDesc:'收穫 XP +10%',                  buff:{ type:'harvest_xp', pct:0.10 } },
+  crab:        { id:'crab',        name:'螃蟹',    emoji:'🦀', rarity:'common',    weight:50,
+                 buffDesc:'收穫品質提升機率 +10%',         buff:{ type:'quality_chance', bonus:0.10 } },
+  penguin:     { id:'penguin',     name:'企鵝',    emoji:'🐧', rarity:'common',    weight:50,
+                 buffDesc:'出售價格 +7%',                  buff:{ type:'sell_bonus', pct:0.07 } },
+  // ── Rare (weight:12) ────────────────────────────────────────────────
   fox:         { id:'fox',         name:'小狐狸',  emoji:'🦊', rarity:'rare',      weight:12,
-                 buffDesc:'所有出售收入 +20%',        buff:{ type:'sell_bonus', pct:0.20 } },
+                 buffDesc:'所有出售收入 +20%',             buff:{ type:'sell_bonus', pct:0.20 } },
   raccoon:     { id:'raccoon',     name:'浣熊',    emoji:'🦝', rarity:'rare',      weight:12,
-                 buffDesc:'每次收穫 +5 XP',           buff:{ type:'harvest_xp_flat', amount:5 } },
+                 buffDesc:'每次收穫 +5 XP',                buff:{ type:'harvest_xp_flat', amount:5 } },
   wolf:        { id:'wolf',        name:'小狼',    emoji:'🐺', rarity:'rare',      weight:12,
-                 buffDesc:'每天開始獲得 +25💰',       buff:{ type:'daily_coins', amount:25 } },
+                 buffDesc:'每天開始獲得 +25💰',            buff:{ type:'daily_coins', amount:25 } },
   eagle:       { id:'eagle',       name:'老鷹',    emoji:'🦅', rarity:'rare',      weight:12,
-                 buffDesc:'收穫時 30% 機率獲得雙倍作物', buff:{ type:'double_harvest', chance:0.30 } },
+                 buffDesc:'收穫時 30% 機率獲得雙倍作物',   buff:{ type:'double_harvest', chance:0.30 } },
   lizard:      { id:'lizard',      name:'小蜥蜴',  emoji:'🦎', rarity:'rare',      weight:12,
-                 buffDesc:'作物每天額外生長 +0.3 天', buff:{ type:'grow_speed', bonus:0.30 } },
-  // ── Legendary ───────────────────────────────────────────────────────
+                 buffDesc:'作物每天額外生長 +0.3 天',      buff:{ type:'grow_speed', bonus:0.30 } },
+  deer:        { id:'deer',        name:'小鹿',    emoji:'🦌', rarity:'rare',      weight:12,
+                 buffDesc:'每次收穫 +15💰',                buff:{ type:'harvest_coins', amount:15 } },
+  owl:         { id:'owl',         name:'貓頭鷹',  emoji:'🦉', rarity:'rare',      weight:12,
+                 buffDesc:'每次收穫 +10 XP',               buff:{ type:'harvest_xp_flat', amount:10 } },
+  tiger:       { id:'tiger',       name:'小老虎',  emoji:'🐯', rarity:'rare',      weight:12,
+                 buffDesc:'收穫時 20% 機率獲得雙倍作物',   buff:{ type:'double_harvest', chance:0.20 } },
+  dolphin:     { id:'dolphin',     name:'海豚',    emoji:'🐬', rarity:'rare',      weight:12,
+                 buffDesc:'出售收入 +15%',                  buff:{ type:'sell_bonus', pct:0.15 } },
+  panda:       { id:'panda',       name:'貓熊',    emoji:'🐼', rarity:'rare',      weight:12,
+                 buffDesc:'作物每天額外生長 +0.4 天',      buff:{ type:'grow_speed', bonus:0.40 } },
+  elephant:    { id:'elephant',    name:'大象',    emoji:'🐘', rarity:'rare',      weight:12,
+                 buffDesc:'每天開始獲得 +35💰',            buff:{ type:'daily_coins', amount:35 } },
+  horse:       { id:'horse',       name:'駿馬',    emoji:'🐴', rarity:'rare',      weight:12,
+                 buffDesc:'作物每天額外生長 +0.5 天',      buff:{ type:'grow_speed', bonus:0.50 } },
+  whale:       { id:'whale',       name:'鯨魚',    emoji:'🐋', rarity:'rare',      weight:12,
+                 buffDesc:'出售收入 +25%',                  buff:{ type:'sell_bonus', pct:0.25 } },
+  gorilla:     { id:'gorilla',     name:'大猩猩',  emoji:'🦍', rarity:'rare',      weight:12,
+                 buffDesc:'每次收穫 +20💰',                buff:{ type:'harvest_coins', amount:20 } },
+  peacock:     { id:'peacock',     name:'孔雀',    emoji:'🦚', rarity:'rare',      weight:12,
+                 buffDesc:'收穫品質提升機率 +25%',         buff:{ type:'quality_chance', bonus:0.25 } },
+  // ── Legendary (weight:3) ────────────────────────────────────────────
   unicorn:     { id:'unicorn',     name:'獨角獸',  emoji:'🦄', rarity:'legendary', weight:3,
                  buffDesc:'所有 XP +50%，出售收入 +25%',
                  buff:{ type:'legendary_unicorn', xp_pct:0.50, sell_pct:0.25 } },
   dragon:      { id:'dragon',      name:'金龍',    emoji:'🐉', rarity:'legendary', weight:3,
-                 buffDesc:'每天 +50💰，收穫必為高級',
+                 buffDesc:'每天 +50💰，收穫 40% 機率為高級',
                  buff:{ type:'legendary_dragon', daily_coins:50 } },
+  lion:        { id:'lion',        name:'獅王',    emoji:'🦁', rarity:'legendary', weight:3,
+                 buffDesc:'出售收入 +50%，每次收穫 +30💰',
+                 buff:{ type:'legendary_lion', sell_pct:0.50, harvest_coins:30 } },
+  moonrabbit:  { id:'moonrabbit',  name:'月兔',    emoji:'🌙', rarity:'legendary', weight:3,
+                 buffDesc:'所有 XP +50%，種子費用 -25%',
+                 buff:{ type:'legendary_moonrabbit', xp_pct:0.50, plant_pct:0.25 } },
+  stormdrake:  { id:'stormdrake',  name:'暴風龍',  emoji:'🌪️', rarity:'legendary', weight:3,
+                 buffDesc:'生長 +0.8天/天，每天 +60💰',
+                 buff:{ type:'legendary_storm', grow_bonus:0.80, daily_coins:60 } },
+  // ── Mythic (weight:0.5) ─────────────────────────────────────────────
+  cosmos:      { id:'cosmos',      name:'宇宙靈',  emoji:'🌌', rarity:'mythic',    weight:0.5,
+                 buffDesc:'出售 +60%，XP +80%，每天 +100💰，生長 +0.5天',
+                 buff:{ type:'mythic_cosmos', sell_pct:0.60, xp_pct:0.80, daily_coins:100, grow_bonus:0.50 } },
+  worldtree:   { id:'worldtree',   name:'世界樹精', emoji:'🌳', rarity:'mythic',   weight:0.5,
+                 buffDesc:'每次收穫 +50💰，品質 +50%，種子 -30%',
+                 buff:{ type:'mythic_worldtree', harvest_coins:50, quality_bonus:0.50, plant_pct:0.30 } },
 };
 
 // ── Pet helpers ──────────────────────────────────────────────────────
@@ -125,6 +203,8 @@ function getSellMultiplier() {
   let mult = 1;
   mult += getPetBuffTotal('sell_bonus', 'pct');
   mult += getPetBuffTotal('legendary_unicorn', 'sell_pct');
+  mult += getPetBuffTotal('legendary_lion', 'sell_pct');
+  mult += getPetBuffTotal('mythic_cosmos', 'sell_pct');
   return mult;
 }
 
@@ -159,35 +239,108 @@ function getSeasonByDay(day) {
 // ============================================================
 // 4. LEVEL CONFIG
 // ============================================================
+// XP formula: cumulative xp(n) = (n-1) * (200 + 75*(n-2)),  level 100 ≈ 747,450 XP
 const LEVELS = [
-  { level:1,  xp:0,      title:'新農夫' },
-  { level:2,  xp:100,    title:'見習農' },
-  { level:3,  xp:300,    title:'老農',      unlocks:['strawberry','corn','sunflower'] },
-  { level:4,  xp:600,    title:'農場工' },
-  { level:5,  xp:1000,   title:'農場主',    unlocks:['watermelon','mushroom','grape'] },
-  { level:6,  xp:1500,   title:'農業師' },
-  { level:7,  xp:2500,   title:'資深農師',  unlocks:['peach'] },
-  { level:8,  xp:3500,   title:'農業專家' },
-  { level:9,  xp:5000,   title:'農業達人' },
-  { level:10, xp:7000,   title:'農業宗師',  unlocks:['coconut'] },
-  { level:11, xp:9500,   title:'農地領主' },
-  { level:12, xp:12000,  title:'農業大師' },
-  { level:13, xp:15000,  title:'農耕先鋒' },
-  { level:14, xp:18500,  title:'豐收之王' },
-  { level:15, xp:22500,  title:'神農',      unlocks:['lotus'] },
-  { level:16, xp:27000,  title:'大地守護者' },
-  { level:17, xp:32000,  title:'四季農仙' },
-  { level:18, xp:38000,  title:'穀物聖者' },
-  { level:19, xp:45000,  title:'萬物耕者' },
-  { level:20, xp:53000,  title:'傳說農夫' },
-  { level:22, xp:65000,  title:'天地農神' },
-  { level:25, xp:85000,  title:'自然之主' },
-  { level:28, xp:110000, title:'豐饒使者' },
-  { level:30, xp:140000, title:'農耕傳說' },
-  { level:33, xp:180000, title:'大地之靈' },
-  { level:35, xp:225000, title:'萬古農仙' },
-  { level:38, xp:280000, title:'創世農神' },
-  { level:40, xp:350000, title:'永恆神農' },
+  { level:1,   xp:0,      title:'新農夫' },
+  { level:2,   xp:200,    title:'新農夫二段' },
+  { level:3,   xp:550,    title:'菜鳥農民' },
+  { level:4,   xp:1050,   title:'菜鳥農民二段' },
+  { level:5,   xp:1700,   title:'見習農',     unlocks:['onion'] },
+  { level:6,   xp:2500,   title:'見習農二段' },
+  { level:7,   xp:3450,   title:'見習農三段' },
+  { level:8,   xp:4550,   title:'初級農夫' },
+  { level:9,   xp:5800,   title:'初級農夫二段' },
+  { level:10,  xp:7200,   title:'老農',       unlocks:['carrot'] },
+  { level:11,  xp:8750,   title:'老農二段' },
+  { level:12,  xp:10450,  title:'老農三段' },
+  { level:13,  xp:12300,  title:'熟練農夫' },
+  { level:14,  xp:14300,  title:'熟練農夫二段' },
+  { level:15,  xp:16450,  title:'農場工',     unlocks:['cucumber'] },
+  { level:16,  xp:18750,  title:'農場工二段' },
+  { level:17,  xp:21200,  title:'農場工三段' },
+  { level:18,  xp:23800,  title:'農場工四段',  unlocks:['strawberry'] },
+  { level:19,  xp:26550,  title:'農場工五段' },
+  { level:20,  xp:29450,  title:'農場主',     unlocks:['tomato'] },
+  { level:21,  xp:32500,  title:'農場主二段' },
+  { level:22,  xp:35700,  title:'農場主三段',  unlocks:['corn'] },
+  { level:23,  xp:39050,  title:'農場主四段' },
+  { level:24,  xp:42550,  title:'農場主五段' },
+  { level:25,  xp:46200,  title:'農業師',     unlocks:['pumpkin'] },
+  { level:26,  xp:50000,  title:'農業師二段' },
+  { level:27,  xp:53950,  title:'農業師三段' },
+  { level:28,  xp:58050,  title:'農業師四段' },
+  { level:29,  xp:62300,  title:'農業師五段' },
+  { level:30,  xp:66700,  title:'資深農師',   unlocks:['mushroom'] },
+  { level:31,  xp:71250,  title:'資深農師二段' },
+  { level:32,  xp:75950,  title:'資深農師三段' },
+  { level:33,  xp:80800,  title:'資深農師四段' },
+  { level:34,  xp:85800,  title:'資深農師五段' },
+  { level:35,  xp:90950,  title:'農業專家',   unlocks:['sunflower'] },
+  { level:36,  xp:96250,  title:'農業專家二段' },
+  { level:37,  xp:101700, title:'農業專家三段' },
+  { level:38,  xp:107300, title:'農業專家四段' },
+  { level:39,  xp:113050, title:'農業專家五段' },
+  { level:40,  xp:118950, title:'農業達人',   unlocks:['watermelon'] },
+  { level:41,  xp:125000, title:'農業達人二段' },
+  { level:42,  xp:131200, title:'農業達人三段' },
+  { level:43,  xp:137550, title:'農業達人四段' },
+  { level:44,  xp:144050, title:'農業達人五段' },
+  { level:45,  xp:150700, title:'農業宗師',   unlocks:['grape'] },
+  { level:46,  xp:157500, title:'農業宗師二段' },
+  { level:47,  xp:164450, title:'農業宗師三段' },
+  { level:48,  xp:171550, title:'農業宗師四段' },
+  { level:49,  xp:178800, title:'農業宗師五段' },
+  { level:50,  xp:186200, title:'農地領主',   unlocks:['cherry'] },
+  { level:51,  xp:193750, title:'農地領主二段' },
+  { level:52,  xp:201450, title:'農地領主三段' },
+  { level:53,  xp:209300, title:'農地領主四段' },
+  { level:54,  xp:217300, title:'農地領主五段' },
+  { level:55,  xp:225450, title:'農業大師',   unlocks:['blueberry'] },
+  { level:56,  xp:233750, title:'農業大師二段' },
+  { level:57,  xp:242200, title:'農業大師三段' },
+  { level:58,  xp:250800, title:'農業大師四段' },
+  { level:59,  xp:259550, title:'農業大師五段' },
+  { level:60,  xp:268450, title:'農耕先鋒',   unlocks:['peach'] },
+  { level:61,  xp:277500, title:'農耕先鋒二段' },
+  { level:62,  xp:286700, title:'農耕先鋒三段' },
+  { level:63,  xp:296050, title:'農耕先鋒四段' },
+  { level:64,  xp:305550, title:'農耕先鋒五段' },
+  { level:65,  xp:315200, title:'豐收之王',   unlocks:['coconut'] },
+  { level:66,  xp:325000, title:'豐收之王二段' },
+  { level:67,  xp:334950, title:'豐收之王三段' },
+  { level:68,  xp:345050, title:'豐收之王四段' },
+  { level:69,  xp:355300, title:'豐收之王五段' },
+  { level:70,  xp:365700, title:'神農',       unlocks:['rose'] },
+  { level:71,  xp:376250, title:'神農二段' },
+  { level:72,  xp:386950, title:'神農三段' },
+  { level:73,  xp:397800, title:'神農四段' },
+  { level:74,  xp:408800, title:'神農五段' },
+  { level:75,  xp:419950, title:'大地守護者',  unlocks:['lotus'] },
+  { level:76,  xp:431250, title:'大地守護者二段' },
+  { level:77,  xp:442700, title:'大地守護者三段' },
+  { level:78,  xp:454300, title:'大地守護者四段' },
+  { level:79,  xp:466050, title:'大地守護者五段' },
+  { level:80,  xp:477950, title:'四季農仙',   unlocks:['crystalHerb'] },
+  { level:81,  xp:490000, title:'四季農仙二段' },
+  { level:82,  xp:502200, title:'四季農仙三段' },
+  { level:83,  xp:514550, title:'四季農仙四段' },
+  { level:84,  xp:527050, title:'四季農仙五段' },
+  { level:85,  xp:539700, title:'穀物聖者',   unlocks:['starBlossom'] },
+  { level:86,  xp:552500, title:'穀物聖者二段' },
+  { level:87,  xp:565450, title:'穀物聖者三段' },
+  { level:88,  xp:578550, title:'穀物聖者四段' },
+  { level:89,  xp:591800, title:'穀物聖者五段' },
+  { level:90,  xp:605200, title:'萬物耕者',   unlocks:['sacredBamboo'] },
+  { level:91,  xp:618750, title:'萬物耕者二段' },
+  { level:92,  xp:632450, title:'萬物耕者三段' },
+  { level:93,  xp:646300, title:'萬物耕者四段' },
+  { level:94,  xp:660300, title:'萬物耕者五段' },
+  { level:95,  xp:674450, title:'傳說農夫' },
+  { level:96,  xp:688750, title:'傳說農夫二段' },
+  { level:97,  xp:703200, title:'傳說農夫三段' },
+  { level:98,  xp:717800, title:'傳說農夫四段' },
+  { level:99,  xp:732550, title:'傳說農夫五段' },
+  { level:100, xp:747450, title:'永恆神農',   unlocks:['rainbowFruit'] },
 ];
 
 const XP_FOR = { plant:5, water:2, harvest:15, quest:50, login:10 };
@@ -400,14 +553,20 @@ let pendingLevelUps = [];
 let isAnimating = false;
 
 function addXP(amount, source) {
-  // Unicorn: +XP% (stack additively across multiple unicorns)
-  const unicornPct = getPetBuffTotal('legendary_unicorn', 'xp_pct');
-  if (unicornPct > 0) amount = Math.round(amount * (1 + unicornPct));
+  // All XP% boosts stacked
+  const xpPct = getPetBuffTotal('legendary_unicorn', 'xp_pct')
+              + getPetBuffTotal('legendary_moonrabbit', 'xp_pct')
+              + getPetBuffTotal('mythic_cosmos', 'xp_pct');
+  if (xpPct > 0) amount = Math.round(amount * (1 + xpPct));
   // Harvest XP % and flat bonuses
   if (source === 'harvest') {
     const harvestPct = getPetBuffTotal('harvest_xp', 'pct');
     if (harvestPct > 0) amount = Math.round(amount * (1 + harvestPct));
     amount += getPetBuffTotal('harvest_xp_flat', 'amount');
+  }
+  // Plant XP flat bonus
+  if (source === 'plant') {
+    amount += getPetBuffTotal('plant_xp', 'amount');
   }
   state.player.xp += amount;
   checkLevelUp();
@@ -551,7 +710,9 @@ function plantSeed(idx) {
 
   // Apply pet seed-discount buff (all pets stacked)
   let actualCost = crop.seedCost;
-  const totalDiscount = getPetBuffTotal('plant_discount', 'pct');
+  const totalDiscount = getPetBuffTotal('plant_discount', 'pct')
+                      + getPetBuffTotal('legendary_moonrabbit', 'plant_pct')
+                      + getPetBuffTotal('mythic_worldtree', 'plant_pct');
   if (!inStash && totalDiscount > 0) {
     actualCost = Math.max(1, Math.floor(actualCost * (1 - totalDiscount)));
   }
@@ -616,11 +777,14 @@ function harvestTile(idx, silent = false) {
 
   // Determine quality
   let quality = 'normal';
-  if (crop.alwaysExcellent || hasPetBuff('legendary_dragon') || state.weatherEffect === 'coin_x2') {
+  if (crop.alwaysExcellent || state.weatherEffect === 'coin_x2' ||
+      (hasPetBuff('legendary_dragon') && Math.random() < 0.40)) {
     quality = 'excellent';
   } else {
     let goodChance = (state.season === 'autumn') ? 0.3 : 0;
-    goodChance = Math.min(1, goodChance + getPetBuffTotal('quality_chance', 'bonus'));
+    goodChance = Math.min(1, goodChance
+      + getPetBuffTotal('quality_chance', 'bonus')
+      + getPetBuffTotal('mythic_worldtree', 'quality_bonus'));
     if (hasPetBuff('rain_quality') && state.weather === 'rain') goodChance = 1;
     if (Math.random() < goodChance) quality = 'good';
   }
@@ -633,14 +797,18 @@ function harvestTile(idx, silent = false) {
     addToInventory(tile.crop, quality);
     addLog(`🦅 雙倍收穫！獲得額外 ${crop.emoji}！`, 'good');
   }
-  // Pet: harvest coins bonus (all pets combined)
-  const harvestCoins = getPetBuffTotal('harvest_coins', 'amount');
+  // Pet: harvest coins (all sources stacked)
+  const harvestCoins = getPetBuffTotal('harvest_coins', 'amount')
+                     + getPetBuffTotal('legendary_lion', 'harvest_coins')
+                     + getPetBuffTotal('mythic_worldtree', 'harvest_coins');
   if (harvestCoins > 0) state.coins += harvestCoins;
-  // Pet: spring coins bonus
-  if (state.season === 'spring') {
-    const springCoins = getPetBuffTotal('spring_coins', 'amount');
-    if (springCoins > 0) state.coins += springCoins;
-  }
+  // Seasonal bonus coins
+  const seasonBonus =
+    (state.season === 'spring'  ? getPetBuffTotal('spring_coins',  'amount') : 0) +
+    (state.season === 'summer'  ? getPetBuffTotal('summer_coins',  'amount') : 0) +
+    (state.season === 'autumn'  ? getPetBuffTotal('autumn_coins',  'amount') : 0) +
+    (state.season === 'winter'  ? getPetBuffTotal('winter_coins',  'amount') : 0);
+  if (seasonBonus > 0) state.coins += seasonBonus;
 
   if (state.weather === 'rain') state.stats.rainHarvest++;
 
@@ -688,14 +856,21 @@ function doAdvanceDay() {
   state.pets.newPets   = true;
 
   // All pets: daily-coins buff (stacked)
-  const totalDailyCoins = getPetBuffTotal('daily_coins', 'amount') + getPetBuffTotal('legendary_dragon', 'daily_coins');
+  let totalDailyCoins = getPetBuffTotal('daily_coins', 'amount')
+                      + getPetBuffTotal('legendary_dragon', 'daily_coins')
+                      + getPetBuffTotal('legendary_storm', 'daily_coins')
+                      + getPetBuffTotal('mythic_cosmos', 'daily_coins');
+  // rain_coins: bonus when today's weather is rain (rolled just after this)
+  const newWeather = rollWeather();
+  state.weather       = newWeather.type;
+  state.weatherEffect = newWeather.effect;
+  if (state.weather === 'rain') {
+    totalDailyCoins += getPetBuffTotal('rain_coins', 'amount');
+  }
   if (totalDailyCoins > 0) {
     state.coins += totalDailyCoins;
     addLog(`🐾 寵物們帶來 ${totalDailyCoins}💰！`, 'good');
   }
-  const newWeather = rollWeather();
-  state.weather       = newWeather.type;
-  state.weatherEffect = newWeather.effect;
 
   const seasonInfo = SEASON_INFO[state.season];
 
@@ -747,7 +922,9 @@ function doAdvanceDay() {
         let inc = seasonInfo.growthRate;
         if (state.weatherEffect === 'slow_50') inc *= 0.5;
         // Pet: grow speed bonus (all pets stacked)
-        inc += getPetBuffTotal('grow_speed', 'bonus');
+        inc += getPetBuffTotal('grow_speed', 'bonus')
+             + getPetBuffTotal('legendary_storm', 'grow_bonus')
+             + getPetBuffTotal('mythic_cosmos', 'grow_bonus');
         tile.growthDay += inc;
         tile.watered    = false;
         tile.wiltedDays = 0;
@@ -1018,33 +1195,52 @@ function renderSidebar() {
 function renderShop() {
   const list = document.getElementById('seed-list');
   list.innerHTML = '';
-  Object.values(CROPS).forEach(crop => {
-    const locked     = state.player.level < crop.unlockLevel;
-    const canAfford  = state.coins >= crop.seedCost;
-    const selected   = state.selectedSeed === crop.id && state.activeTool === 'seed';
-    const inSeason   = !crop.seasons || crop.seasons.includes(state.season);
 
-    const btn = document.createElement('button');
-    btn.className = `seed-btn${selected ? ' selected' : ''}${locked ? ' locked' : (!canAfford ? ' cant-afford' : '')}`;
+  const rarityOrder = ['common','rare','premium','legendary','mythic'];
+  const groups = {};
+  rarityOrder.forEach(r => groups[r] = []);
+  Object.values(CROPS).forEach(c => { if (groups[c.rarity]) groups[c.rarity].push(c); });
 
-    const seasonMark  = (!crop.seasons || inSeason) ? '' : `<span style="color:#ff8a65;font-size:.6rem">⚠️季外</span>`;
-    const stashQty    = state.seedStash[crop.id] || 0;
-    const stashBadge  = stashQty > 0 ? `<span style="color:#ffd700;font-size:.62rem">📦×${stashQty}</span>` : '';
-    btn.innerHTML = `
-      <span class="seed-emoji">${crop.emoji}</span>
-      <span>
-        <div class="seed-name">${crop.name} ${seasonMark} ${stashBadge}</div>
-        <div class="seed-meta">${crop.growDays}天</div>
-      </span>
-      <span class="seed-price">
-        ${locked
-          ? `<span class="seed-lock">🔒 Lv.${crop.unlockLevel}</span>`
-          : `<span class="seed-cost">-${crop.seedCost}💰</span><span class="seed-sell">+${crop.sellPrice}💰</span>`
-        }
-      </span>
-    `;
-    if (!locked) btn.addEventListener('click', () => selectSeed(crop.id));
-    list.appendChild(btn);
+  rarityOrder.forEach(rarity => {
+    const crops = groups[rarity];
+    if (!crops.length) return;
+
+    // Section header
+    const header = document.createElement('div');
+    header.className = 'shop-rarity-header';
+    header.style.color = CROP_RARITY_COLOR[rarity];
+    header.textContent = `── ${CROP_RARITY_LABEL[rarity]} ──`;
+    list.appendChild(header);
+
+    crops.forEach(crop => {
+      const locked    = state.player.level < crop.unlockLevel;
+      const canAfford = state.coins >= crop.seedCost;
+      const selected  = state.selectedSeed === crop.id && state.activeTool === 'seed';
+      const inSeason  = !crop.seasons || crop.seasons.includes(state.season);
+
+      const btn = document.createElement('button');
+      btn.className = `seed-btn${selected ? ' selected' : ''}${locked ? ' locked' : (!canAfford ? ' cant-afford' : '')}`;
+
+      const seasonMark = (!crop.seasons || inSeason) ? '' : `<span style="color:#ff8a65;font-size:.6rem">⚠️季外</span>`;
+      const stashQty   = state.seedStash[crop.id] || 0;
+      const stashBadge = stashQty > 0 ? `<span style="color:#ffd700;font-size:.62rem">📦×${stashQty}</span>` : '';
+      const excellentBadge = crop.alwaysExcellent ? `<span style="color:${CROP_RARITY_COLOR[rarity]};font-size:.58rem">✨必高級</span>` : '';
+      btn.innerHTML = `
+        <span class="seed-emoji">${crop.emoji}</span>
+        <span>
+          <div class="seed-name">${crop.name} ${seasonMark} ${stashBadge} ${excellentBadge}</div>
+          <div class="seed-meta">${crop.growDays}天</div>
+        </span>
+        <span class="seed-price">
+          ${locked
+            ? `<span class="seed-lock">🔒 Lv.${crop.unlockLevel}</span>`
+            : `<span class="seed-cost">-${crop.seedCost}💰</span><span class="seed-sell">+${crop.sellPrice}💰</span>`
+          }
+        </span>
+      `;
+      if (!locked) btn.addEventListener('click', () => selectSeed(crop.id));
+      list.appendChild(btn);
+    });
   });
 }
 
@@ -1201,8 +1397,8 @@ function renderQuests() {
 }
 
 // ── Pet Panel ───────────────────────────────────────────────────────
-const RARITY_LABEL = { common:'普通', rare:'稀有', legendary:'傳奇' };
-const RARITY_COLOR = { common:'#aaa', rare:'#64b5f6', legendary:'#ffd700' };
+const RARITY_LABEL = { common:'普通', rare:'稀有', legendary:'傳奇', mythic:'神話' };
+const RARITY_COLOR = { common:'#aaa', rare:'#64b5f6', legendary:'#ffd700', mythic:'#e040fb' };
 
 // ── Pet sheet open / close ────────────────────────────────────────
 function openPetSheet() {
@@ -1221,7 +1417,7 @@ function closePetSheet() {
 
 // ── Feeding helpers ───────────────────────────────────────────────
 function feedTarget(rarity) {
-  return rarity === 'common' ? 5 : rarity === 'rare' ? 10 : 15;
+  return rarity === 'common' ? 5 : rarity === 'rare' ? 10 : rarity === 'legendary' ? 15 : 30;
 }
 
 function renderPets() {
@@ -1271,7 +1467,7 @@ function renderPets() {
     const fed     = state.pets.feeding[petId] || 0;
     const done    = fed >= target;
     const pct     = Math.min(fed / target * 100, 100).toFixed(0);
-    const reqNote = pet.rarity === 'legendary'
+    const reqNote = (pet.rarity === 'legendary' || pet.rarity === 'mythic')
       ? `需餵 ${target} 個 ✨高級農作`
       : `需餵 ${target} 個農作物`;
 
@@ -1334,7 +1530,7 @@ function setActivePet(petId) {
 // ── Feeding modal ─────────────────────────────────────────────────
 function showFeedModal(petId) {
   const pet         = PETS[petId];
-  const isLegendary = pet.rarity === 'legendary';
+  const isLegendary = pet.rarity === 'legendary' || pet.rarity === 'mythic';
   const target      = feedTarget(pet.rarity);
   const fed         = state.pets.feeding[petId] || 0;
   const remaining   = target - fed;
@@ -1633,7 +1829,9 @@ function _applyPlantToTile(idx, tileEl) {
   const crop    = CROPS[state.selectedSeed];
   const inStash = (state.seedStash[state.selectedSeed] || 0) > 0;
   let actualCost = crop.seedCost;
-  const totalDiscount = getPetBuffTotal('plant_discount', 'pct');
+  const totalDiscount = getPetBuffTotal('plant_discount', 'pct')
+                      + getPetBuffTotal('legendary_moonrabbit', 'plant_pct')
+                      + getPetBuffTotal('mythic_worldtree', 'plant_pct');
   if (!inStash && totalDiscount > 0) {
     actualCost = Math.max(1, Math.floor(actualCost * (1 - totalDiscount)));
   }
