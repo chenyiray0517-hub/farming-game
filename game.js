@@ -587,6 +587,7 @@ function freshState() {
       activePetId:   null,  // which myPet is currently providing buff
       dailyPets:     [],    // filled after freshState() in initGame
       recruitedPets: [],    // petIds recruited via gacha, pending feeding
+      recruitedDays: {},    // { petId: dayRecruited } — for expiry tracking
       newPets:       false,
       feeding:       {},    // { petId: fedCount } — daily resets (not recruited)
     },
@@ -621,6 +622,7 @@ function loadGame() {
     if (!s.pets.feeding)        s.pets.feeding        = {};
     if (!s.pets.dailyPets)      s.pets.dailyPets      = [];
     if (!s.pets.recruitedPets)  s.pets.recruitedPets  = [];
+    if (!s.pets.recruitedDays)  s.pets.recruitedDays  = {};
     if (!s.usedCodes) s.usedCodes = [];
     // migrate: old single-pet activePetId → myPets array
     if (s.pets.activePetId && s.pets.myPets.length === 0) {
@@ -1004,7 +1006,23 @@ function doAdvanceDay() {
   Object.keys(state.pets.feeding).forEach(id => {
     if (!recruitedIds.has(id)) delete state.pets.feeding[id];
   });
-  state.pets.newPets   = true;
+  state.pets.newPets = true;
+
+  // 招募寵物超過 3 天自動消失
+  const RECRUIT_EXPIRE_DAYS = 3;
+  const expired = (state.pets.recruitedPets || []).filter(id => {
+    const recruitedDay = state.pets.recruitedDays[id];
+    return recruitedDay !== undefined && (state.day - recruitedDay) >= RECRUIT_EXPIRE_DAYS;
+  });
+  if (expired.length > 0) {
+    expired.forEach(id => {
+      const pet = PETS[id];
+      delete state.pets.feeding[id];
+      delete state.pets.recruitedDays[id];
+      if (pet) addLog(`⏰ ${pet.emoji}${pet.name} 招募期限已過，自動離開了。`, 'warn');
+    });
+    state.pets.recruitedPets = state.pets.recruitedPets.filter(id => !expired.includes(id));
+  }
 
   // All pets: daily-coins buff (stacked)
   let totalDailyCoins = getPetBuffTotal('daily_coins', 'amount')
@@ -1674,6 +1692,11 @@ function renderPets() {
         : pet.rarity === 'legendary'
           ? `需餵 ${target} 個 ✨高級農作`
           : `需餵 ${target} 個農作物`;
+      const recruitedDay = (state.pets.recruitedDays || {})[petId];
+      const daysLeft = recruitedDay !== undefined ? Math.max(0, 3 - (state.day - recruitedDay)) : 3;
+      const expireNote = daysLeft <= 1
+        ? `<span style="color:#ef5350;font-size:.65rem">⚠️ 剩 ${daysLeft} 天</span>`
+        : `<span style="color:rgba(255,255,255,.35);font-size:.65rem">剩 ${daysLeft} 天</span>`;
       html += `
         <div class="pet-card rarity-border-${pet.rarity}">
           <div class="pet-card-top">
@@ -1681,6 +1704,7 @@ function renderPets() {
             <div class="pet-card-info">
               <div class="pet-card-name">${pet.name}
                 <span class="pet-rarity-badge rarity-${pet.rarity}">${RARITY_LABEL[pet.rarity]}</span>
+                ${!isOwned ? expireNote : ''}
               </div>
               <div class="pet-card-buff">✨ ${pet.buffDesc}</div>
             </div>
@@ -1782,6 +1806,7 @@ function renderPets() {
 function cancelRecruitPet(petId) {
   state.pets.recruitedPets = state.pets.recruitedPets.filter(id => id !== petId);
   delete state.pets.feeding[petId];
+  delete state.pets.recruitedDays[petId];
   const pet = PETS[petId];
   addLog(`❌ 取消招募 ${pet.emoji}${pet.name}`, 'warn');
   saveGame(); renderPets();
@@ -1841,6 +1866,7 @@ function doGachaPull() {
 
   state.coins -= GACHA_COST;
   state.pets.recruitedPets.push(pulled.id);
+  state.pets.recruitedDays[pulled.id] = state.day;
 
   const rarityColor = RARITY_COLOR[pulled.rarity] || '#aaa';
   const target = feedTarget(pulled.rarity);
@@ -1912,6 +1938,7 @@ function doGachaPull10() {
     pulledPets.push(pet);
     usedInPull.add(pet.id);
     state.pets.recruitedPets.push(pet.id);
+    state.pets.recruitedDays[pet.id] = state.day;
   }
 
   saveGame(); renderAll(); renderPets();
@@ -2048,6 +2075,7 @@ function doAddPet(petId) {
   if (!state.pets.activePetId) state.pets.activePetId = petId;
   state.pets.recruitedPets = (state.pets.recruitedPets || []).filter(id => id !== petId);
   delete state.pets.feeding[petId];
+  delete state.pets.recruitedDays[petId];
   addLog(`🐾 成功收養 ${pet.emoji}${pet.name}（${RARITY_LABEL[pet.rarity]}）！`, 'good');
   checkAchievements();
   saveGame(); renderAll(); renderPets();
