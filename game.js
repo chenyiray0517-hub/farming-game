@@ -68,20 +68,21 @@ const SFX = (() => {
         o.start(); o.stop(c.currentTime + 0.2);
       });
     },
-    // 🐾 餵養：咀嚼短噪聲
+    // 🐾 餵養：咀嚼噪聲（加長加大）
     feed() {
       safe(c => {
-        const len = Math.floor(c.sampleRate * 0.09);
+        const dur = 0.32;
+        const len = Math.floor(c.sampleRate * dur);
         const buf = c.createBuffer(1, len, c.sampleRate);
         const d   = buf.getChannelData(0);
         for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len) * 0.9;
         const src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
-        f.type = 'bandpass'; f.frequency.value = 500; f.Q.value = 1.5;
+        f.type = 'bandpass'; f.frequency.value = 450; f.Q.value = 1.2;
         src.buffer = buf;
         src.connect(f); f.connect(g); g.connect(c.destination);
-        g.gain.setValueAtTime(0.38, c.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.11);
-        src.start(); src.stop(c.currentTime + 0.11);
+        g.gain.setValueAtTime(0.75, c.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+        src.start(); src.stop(c.currentTime + dur);
       });
     },
   };
