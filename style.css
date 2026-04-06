@@ -1067,6 +1067,23 @@ body[data-tool="harvest"] .tile.ready:hover   { border-color: #fff; }
 }
 .pet-gacha-btn:active { opacity: .85; transform: scale(.97); }
 .pet-gacha-btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+.pet-gacha-btns { display: flex; flex-direction: column; gap: 8px; }
+.pet-gacha-btn10 {
+  background: linear-gradient(135deg, #e65100, #b71c1c);
+  box-shadow: 0 3px 14px rgba(230,81,0,.45);
+  position: relative;
+}
+.gacha-discount-badge {
+  position: absolute;
+  top: -7px; right: 10px;
+  background: #ffd600;
+  color: #333;
+  font-size: .62rem;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 8px;
+  letter-spacing: .03em;
+}
 
 /* ═══════════════════════════════════════
    DESKTOP override (≥ 700px)

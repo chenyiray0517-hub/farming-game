@@ -239,6 +239,12 @@ const PETS = {
   stormdrake:  { id:'stormdrake',  name:'暴風龍',  emoji:'🌪️', rarity:'legendary', weight:3,
                  buffDesc:'生長 +0.8天/天，每天 +60💰',
                  buff:{ type:'legendary_storm', grow_bonus:0.80, daily_coins:60 } },
+  angel:       { id:'angel',       name:'天使獸',  emoji:'🌟', rarity:'legendary', weight:3,
+                 buffDesc:'出售收入 +40%，每次收穫 +25💰，每天 +40💰',
+                 buff:{ type:'legendary_angel', sell_pct:0.40, harvest_coins:25, daily_coins:40 } },
+  seadragon:   { id:'seadragon',   name:'海龍王',  emoji:'🌊', rarity:'legendary', weight:3,
+                 buffDesc:'作物生長 +1.0天/天，種子費用 -30%，XP +30%',
+                 buff:{ type:'legendary_seadragon', grow_bonus:1.0, plant_pct:0.30, xp_pct:0.30 } },
   // ── Mythic (weight:0.5) ─────────────────────────────────────────────
   cosmos:      { id:'cosmos',      name:'宇宙靈',  emoji:'🌌', rarity:'mythic',    weight:0.5,
                  buffDesc:'出售 +60%，XP +80%，每天 +100💰，生長 +0.5天',
@@ -246,6 +252,12 @@ const PETS = {
   worldtree:   { id:'worldtree',   name:'世界樹精', emoji:'🌳', rarity:'mythic',   weight:0.5,
                  buffDesc:'每次收穫 +50💰，品質 +50%，種子 -30%',
                  buff:{ type:'mythic_worldtree', harvest_coins:50, quality_bonus:0.50, plant_pct:0.30 } },
+  fategod:     { id:'fategod',     name:'命運神',  emoji:'⚖️', rarity:'mythic',    weight:0.5,
+                 buffDesc:'出售 +80%，每次收穫 +80💰，XP +70%，每天 +80💰',
+                 buff:{ type:'mythic_fate', sell_pct:0.80, harvest_coins:80, xp_pct:0.70, daily_coins:80 } },
+  timebeast:   { id:'timebeast',   name:'時光獸',  emoji:'⌛', rarity:'mythic',    weight:0.5,
+                 buffDesc:'生長 +2.0天/天，XP +100%，種子 -45%，品質 +40%',
+                 buff:{ type:'mythic_time', grow_bonus:2.0, xp_pct:1.00, plant_pct:0.45, quality_bonus:0.40 } },
 };
 
 // ── Pet helpers ──────────────────────────────────────────────────────
@@ -255,7 +267,7 @@ function generateDailyPets() {
   //   legendary: 3 + level*0.15  → lv1≈3.15, lv50≈10.5, lv100≈18
   //   mythic:    0.5 + level*0.05 → lv1≈0.55, lv50≈3,    lv100≈5.5
   const effectiveWeight = p => {
-    if (p.rarity === 'mythic')    return 0.5 + level * 0.05;
+    if (p.rarity === 'mythic')    return 2.0 + level * 0.10;
     if (p.rarity === 'legendary') return 3   + level * 0.15;
     return p.weight;
   };
@@ -301,7 +313,9 @@ function getSellMultiplier() {
   mult += getPetBuffTotal('sell_bonus', 'pct');
   mult += getPetBuffTotal('legendary_unicorn', 'sell_pct');
   mult += getPetBuffTotal('legendary_lion', 'sell_pct');
+  mult += getPetBuffTotal('legendary_angel', 'sell_pct');
   mult += getPetBuffTotal('mythic_cosmos', 'sell_pct');
+  mult += getPetBuffTotal('mythic_fate', 'sell_pct');
   return mult;
 }
 
@@ -569,11 +583,12 @@ function freshState() {
     questProgress:  { earn:0 },
     dayTimeLeft:    120,   // seconds remaining to plant this day (2 minutes)
     pets: {
-      myPets:      [],    // [{ petId }] — max 5
-      activePetId: null,  // which myPet is currently providing buff
-      dailyPets:   [],    // filled after freshState() in initGame
-      newPets:     false,
-      feeding:     {},    // { petId: fedCount } — reset each day
+      myPets:        [],    // [{ petId }] — max 5
+      activePetId:   null,  // which myPet is currently providing buff
+      dailyPets:     [],    // filled after freshState() in initGame
+      recruitedPets: [],    // petIds recruited via gacha, pending feeding
+      newPets:       false,
+      feeding:       {},    // { petId: fedCount } — daily resets (not recruited)
     },
     usedCodes: [],
   };
@@ -603,8 +618,9 @@ function loadGame() {
     if (s.dayTimeLeft === undefined)  s.dayTimeLeft = 120;
     if (!s.pets) s.pets = { myPets: [], activePetId: null, dailyPets: [], newPets: false, feeding: {} };
     if (!s.pets.myPets)   s.pets.myPets   = [];
-    if (!s.pets.feeding)  s.pets.feeding  = {};
-    if (!s.pets.dailyPets) s.pets.dailyPets = [];
+    if (!s.pets.feeding)        s.pets.feeding        = {};
+    if (!s.pets.dailyPets)      s.pets.dailyPets      = [];
+    if (!s.pets.recruitedPets)  s.pets.recruitedPets  = [];
     if (!s.usedCodes) s.usedCodes = [];
     // migrate: old single-pet activePetId → myPets array
     if (s.pets.activePetId && s.pets.myPets.length === 0) {
@@ -673,7 +689,10 @@ function addXP(amount, source) {
   // All XP% boosts stacked
   const xpPct = getPetBuffTotal('legendary_unicorn', 'xp_pct')
               + getPetBuffTotal('legendary_moonrabbit', 'xp_pct')
-              + getPetBuffTotal('mythic_cosmos', 'xp_pct');
+              + getPetBuffTotal('legendary_seadragon', 'xp_pct')
+              + getPetBuffTotal('mythic_cosmos', 'xp_pct')
+              + getPetBuffTotal('mythic_fate', 'xp_pct')
+              + getPetBuffTotal('mythic_time', 'xp_pct');
   if (xpPct > 0) amount = Math.round(amount * (1 + xpPct));
   // Harvest XP % and flat bonuses
   if (source === 'harvest') {
@@ -831,7 +850,9 @@ function plantSeed(idx) {
   let actualCost = crop.seedCost;
   const totalDiscount = getPetBuffTotal('plant_discount', 'pct')
                       + getPetBuffTotal('legendary_moonrabbit', 'plant_pct')
-                      + getPetBuffTotal('mythic_worldtree', 'plant_pct');
+                      + getPetBuffTotal('legendary_seadragon', 'plant_pct')
+                      + getPetBuffTotal('mythic_worldtree', 'plant_pct')
+                      + getPetBuffTotal('mythic_time', 'plant_pct');
   if (!inStash && totalDiscount > 0) {
     actualCost = Math.max(1, Math.floor(actualCost * (1 - totalDiscount)));
   }
@@ -906,7 +927,8 @@ function harvestTile(idx, silent = false) {
     let goodChance = (state.season === 'autumn') ? 0.3 : 0;
     goodChance = Math.min(1, goodChance
       + getPetBuffTotal('quality_chance', 'bonus')
-      + getPetBuffTotal('mythic_worldtree', 'quality_bonus'));
+      + getPetBuffTotal('mythic_worldtree', 'quality_bonus')
+      + getPetBuffTotal('mythic_time', 'quality_bonus'));
     if (hasPetBuff('rain_quality') && state.weather === 'rain') goodChance = 1;
     if (Math.random() < goodChance) quality = 'good';
   }
@@ -923,7 +945,9 @@ function harvestTile(idx, silent = false) {
   // Pet: harvest coins (all sources stacked)
   const harvestCoins = getPetBuffTotal('harvest_coins', 'amount')
                      + getPetBuffTotal('legendary_lion', 'harvest_coins')
-                     + getPetBuffTotal('mythic_worldtree', 'harvest_coins');
+                     + getPetBuffTotal('legendary_angel', 'harvest_coins')
+                     + getPetBuffTotal('mythic_worldtree', 'harvest_coins')
+                     + getPetBuffTotal('mythic_fate', 'harvest_coins');
   if (harvestCoins > 0) state.coins += harvestCoins;
   // Seasonal bonus coins
   const seasonBonus =
@@ -975,14 +999,20 @@ function doAdvanceDay() {
 
   // Generate new daily pets & reset feeding progress
   state.pets.dailyPets = generateDailyPets();
-  state.pets.feeding   = {};
+  // 只清除每日寵物的飼養進度，保留招募中寵物的進度
+  const recruitedIds = new Set(state.pets.recruitedPets || []);
+  Object.keys(state.pets.feeding).forEach(id => {
+    if (!recruitedIds.has(id)) delete state.pets.feeding[id];
+  });
   state.pets.newPets   = true;
 
   // All pets: daily-coins buff (stacked)
   let totalDailyCoins = getPetBuffTotal('daily_coins', 'amount')
                       + getPetBuffTotal('legendary_dragon', 'daily_coins')
                       + getPetBuffTotal('legendary_storm', 'daily_coins')
-                      + getPetBuffTotal('mythic_cosmos', 'daily_coins');
+                      + getPetBuffTotal('legendary_angel', 'daily_coins')
+                      + getPetBuffTotal('mythic_cosmos', 'daily_coins')
+                      + getPetBuffTotal('mythic_fate', 'daily_coins');
   // rain_coins: bonus when today's weather is rain (rolled just after this)
   const newWeather = rollWeather();
   state.weather       = newWeather.type;
@@ -1047,7 +1077,9 @@ function doAdvanceDay() {
         // Pet: grow speed bonus (all pets stacked)
         inc += getPetBuffTotal('grow_speed', 'bonus')
              + getPetBuffTotal('legendary_storm', 'grow_bonus')
-             + getPetBuffTotal('mythic_cosmos', 'grow_bonus');
+             + getPetBuffTotal('legendary_seadragon', 'grow_bonus')
+             + getPetBuffTotal('mythic_cosmos', 'grow_bonus')
+             + getPetBuffTotal('mythic_time', 'grow_bonus');
         tile.growthDay += inc;
         tile.watered    = false;
         tile.wiltedDays = 0;
@@ -1605,18 +1637,73 @@ function renderPets() {
   }
 
   // ── Gacha ──
-  const canGacha = state.coins >= GACHA_COST;
+  const canGacha   = state.coins >= GACHA_COST;
+  const canGacha10 = state.coins >= GACHA_COST_10;
   html += `
     <div class="pet-gacha-section">
       <div class="pet-gacha-title">🎰 寵物招募</div>
-      <div class="pet-gacha-desc">花費 ${GACHA_COST} 💰 抽一隻稀有以上的寵物<br>
+      <div class="pet-gacha-desc">抽取稀有以上的寵物<br>
         <span style="color:#ce93d8">稀有 ／ 傳奇 ／ 神話（高等級出現機率更高）</span>
       </div>
-      <button class="pet-gacha-btn" id="gacha-pull-btn" ${canGacha ? '' : 'disabled'}>
-        🎰 招募寵物（${GACHA_COST} 💰）
-      </button>
+      <div class="pet-gacha-btns">
+        <button class="pet-gacha-btn" id="gacha-pull-btn" ${canGacha ? '' : 'disabled'}>
+          🎰 單抽（${GACHA_COST} 💰）
+        </button>
+        <button class="pet-gacha-btn pet-gacha-btn10" id="gacha-pull10-btn" ${canGacha10 ? '' : 'disabled'}>
+          🎰×10 十連抽（${GACHA_COST_10} 💰）<span class="gacha-discount-badge">9折</span>
+        </button>
+      </div>
     </div>
   `;
+
+  // ── Recruited Pets ──
+  const recruitedPets = state.pets.recruitedPets || [];
+  if (recruitedPets.length > 0) {
+    html += `<div class="pet-section-title" style="margin-top:16px">🎰 招募中的寵物 <span style="font-size:.63rem;color:rgba(255,255,255,.4)">飼養滿後可收養</span></div>`;
+    html += '<div class="pet-daily-list">';
+    recruitedPets.forEach(petId => {
+      const pet    = PETS[petId];
+      if (!pet) return;
+      const isOwned = myPets.some(p => p.petId === petId);
+      const target  = feedTarget(pet.rarity);
+      const fed     = state.pets.feeding[petId] || 0;
+      const done    = fed >= target;
+      const pct     = Math.min(fed / target * 100, 100).toFixed(0);
+      const reqNote = pet.rarity === 'mythic'
+        ? `需餵 ${target} 個 🌟傳奇農作`
+        : pet.rarity === 'legendary'
+          ? `需餵 ${target} 個 ✨高級農作`
+          : `需餵 ${target} 個農作物`;
+      html += `
+        <div class="pet-card rarity-border-${pet.rarity}">
+          <div class="pet-card-top">
+            <span class="pet-card-emoji">${pet.emoji}</span>
+            <div class="pet-card-info">
+              <div class="pet-card-name">${pet.name}
+                <span class="pet-rarity-badge rarity-${pet.rarity}">${RARITY_LABEL[pet.rarity]}</span>
+              </div>
+              <div class="pet-card-buff">✨ ${pet.buffDesc}</div>
+            </div>
+            ${isOwned ? `<span class="pet-adopted-tag">已收養</span>` : `<button class="pet-cancel-recruit-btn" data-petid="${petId}" style="font-size:.65rem;padding:3px 8px;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.25);color:rgba(255,255,255,.5);border-radius:8px;cursor:pointer">取消</button>`}
+          </div>
+          ${!isOwned ? `
+            <div class="pet-feed-progress">
+              <div class="pet-feed-bar-wrap">
+                <div class="pet-feed-bar"><div class="pet-feed-fill" style="width:${pct}%"></div></div>
+                <span class="pet-feed-count">${fed}/${target}</span>
+              </div>
+              <span class="pet-feed-req">${reqNote}</span>
+            </div>
+            ${done
+              ? `<button class="pet-adopt-ready-btn" data-petid="${petId}">🎉 可以收養了！</button>`
+              : `<button class="pet-feed-btn" data-petid="${petId}">🌾 餵食</button>`
+            }
+          ` : ''}
+        </div>
+      `;
+    });
+    html += '</div>';
+  }
 
   // ── Daily Pets ──
   html += `<div class="pet-section-title" style="margin-top:16px">今日出現的寵物 <span style="font-size:.63rem;color:rgba(255,255,255,.4)">每天更新</span></div>`;
@@ -1671,6 +1758,8 @@ function renderPets() {
   // Bind events
   const gachaBtn = document.getElementById('gacha-pull-btn');
   if (gachaBtn) gachaBtn.addEventListener('click', doGachaPull);
+  const gachaBtn10 = document.getElementById('gacha-pull10-btn');
+  if (gachaBtn10) gachaBtn10.addEventListener('click', doGachaPull10);
 
   body.querySelectorAll('.pet-activate-btn').forEach(btn =>
     btn.addEventListener('click', () => { setActivePet(btn.dataset.petid); renderPets(); })
@@ -1678,12 +1767,24 @@ function renderPets() {
   body.querySelectorAll('.pet-sm-release-btn').forEach(btn =>
     btn.addEventListener('click', () => releasePetById(btn.dataset.petid))
   );
+  body.querySelectorAll('.pet-cancel-recruit-btn').forEach(btn =>
+    btn.addEventListener('click', () => cancelRecruitPet(btn.dataset.petid))
+  );
   body.querySelectorAll('.pet-feed-btn').forEach(btn =>
     btn.addEventListener('click', () => showFeedModal(btn.dataset.petid))
   );
   body.querySelectorAll('.pet-adopt-ready-btn').forEach(btn =>
     btn.addEventListener('click', () => completePetAdoption(btn.dataset.petid))
   );
+}
+
+// ── Cancel recruit ────────────────────────────────────────────────
+function cancelRecruitPet(petId) {
+  state.pets.recruitedPets = state.pets.recruitedPets.filter(id => id !== petId);
+  delete state.pets.feeding[petId];
+  const pet = PETS[petId];
+  addLog(`❌ 取消招募 ${pet.emoji}${pet.name}`, 'warn');
+  saveGame(); renderPets();
 }
 
 // ── Set active pet ────────────────────────────────────────────────
@@ -1696,7 +1797,8 @@ function setActivePet(petId) {
 }
 
 // ── Gacha pull ────────────────────────────────────────────────────
-const GACHA_COST = 1000;
+const GACHA_COST    = 1000;
+const GACHA_COST_10 = 9000; // 10連抽，9折優惠
 
 function doGachaPull() {
   if (state.coins < GACHA_COST) {
@@ -1711,23 +1813,25 @@ function doGachaPull() {
   const level = state.level || 1;
   const ownedIds = new Set((state.pets.myPets || []).map(p => p.petId));
 
-  // Build pool: rare / legendary / mythic, excluding already-owned pets
+  const recruitedIds = new Set(state.pets.recruitedPets || []);
+
+  // Build pool: rare / legendary / mythic, excluding owned and already-recruited
   const pool = Object.values(PETS).filter(p =>
     (p.rarity === 'rare' || p.rarity === 'legendary' || p.rarity === 'mythic') &&
-    !ownedIds.has(p.id)
+    !ownedIds.has(p.id) && !recruitedIds.has(p.id)
   );
 
   if (pool.length === 0) {
     showModal({
-      emoji: '🏆', title: '收藏完整！',
-      body: `<div class="srow">你已收養了所有稀有以上的寵物！</div>`,
+      emoji: '🏆', title: '招募已滿！',
+      body: `<div class="srow">所有稀有以上的寵物都已收養或招募中！</div>`,
       buttons: [{ text:'關閉', cls:'mbtn-cancel', cb: hideModal }],
     });
     return;
   }
 
   const effectiveWeight = p => {
-    if (p.rarity === 'mythic')    return 0.5 + level * 0.05;
+    if (p.rarity === 'mythic')    return 2.0 + level * 0.10;
     if (p.rarity === 'legendary') return 3   + level * 0.15;
     return p.weight; // rare: 12
   };
@@ -1736,28 +1840,108 @@ function doGachaPull() {
   const pulled = pool.find(p => (r -= effectiveWeight(p)) < 0) || pool[0];
 
   state.coins -= GACHA_COST;
+  state.pets.recruitedPets.push(pulled.id);
 
   const rarityColor = RARITY_COLOR[pulled.rarity] || '#aaa';
+  const target = feedTarget(pulled.rarity);
   const body = `
     <div style="text-align:center;padding:10px 0">
       <div style="font-size:3.2rem;margin-bottom:6px">${pulled.emoji}</div>
       <div style="font-size:1.1rem;font-weight:800;margin-bottom:4px">${pulled.name}</div>
       <div style="color:${rarityColor};font-size:.8rem;font-weight:700;margin-bottom:10px">${RARITY_LABEL[pulled.rarity]}</div>
       <div style="font-size:.78rem;color:rgba(255,255,255,.6)">✨ ${pulled.buffDesc}</div>
+      <div style="font-size:.78rem;color:rgba(255,255,255,.45);margin-top:10px">已加入招募隊列！<br>飼養 ${target} 個農作物後即可收養。</div>
     </div>
   `;
 
-  saveGame(); renderAll();
+  saveGame(); renderAll(); renderPets();
 
   showModal({
-    emoji: '🎰', title: '抽到啦！',
+    emoji: '🎰', title: '招募成功！',
     body,
-    buttons: [
-      { text: '立刻收養', cls: 'mbtn-gold', cb: () => { hideModal(); completePetAdoption(pulled.id); } },
-      { text: '先不收養', cls: 'mbtn-cancel', cb: hideModal },
-    ],
+    buttons: [{ text: '去飼養', cls: 'mbtn-gold', cb: hideModal }],
   });
-  addLog(`🎰 花費 ${GACHA_COST}💰 抽到 ${pulled.emoji}${pulled.name}（${RARITY_LABEL[pulled.rarity]}）！`, 'good');
+  addLog(`🎰 花費 ${GACHA_COST}💰 招募到 ${pulled.emoji}${pulled.name}（${RARITY_LABEL[pulled.rarity]}），快去飼養吧！`, 'good');
+}
+
+function doGachaPull10() {
+  if (state.coins < GACHA_COST_10) {
+    showModal({
+      emoji: '💸', title: '金幣不足',
+      body: `<div class="srow">十連抽需要 ${GACHA_COST_10} 💰，目前只有 ${state.coins} 💰。</div>`,
+      buttons: [{ text:'關閉', cls:'mbtn-cancel', cb: hideModal }],
+    });
+    return;
+  }
+
+  const level    = state.level || 1;
+  const ownedIds     = new Set((state.pets.myPets || []).map(p => p.petId));
+  const recruited10  = new Set(state.pets.recruitedPets || []);
+
+  const allPool = Object.values(PETS).filter(p =>
+    (p.rarity === 'rare' || p.rarity === 'legendary' || p.rarity === 'mythic') &&
+    !ownedIds.has(p.id) && !recruited10.has(p.id)
+  );
+
+  if (allPool.length === 0) {
+    showModal({
+      emoji: '🏆', title: '招募已滿！',
+      body: `<div class="srow">所有稀有以上的寵物都已收養或招募中！</div>`,
+      buttons: [{ text:'關閉', cls:'mbtn-cancel', cb: hideModal }],
+    });
+    return;
+  }
+
+  const effectiveWeight = p => {
+    if (p.rarity === 'mythic')    return 2.0 + level * 0.10;
+    if (p.rarity === 'legendary') return 3   + level * 0.15;
+    return p.weight;
+  };
+
+  state.coins -= GACHA_COST_10;
+
+  // 抽 10 次，同一次內不重複
+  const pulledPets = [];
+  const usedInPull = new Set([...recruited10]);
+  for (let i = 0; i < 10; i++) {
+    const pool = allPool.filter(p => !usedInPull.has(p.id));
+    if (pool.length === 0) break;
+    const total = pool.reduce((s, p) => s + effectiveWeight(p), 0);
+    let r = Math.random() * total;
+    const pet = pool.find(p => (r -= effectiveWeight(p)) < 0) || pool[0];
+    pulledPets.push(pet);
+    usedInPull.add(pet.id);
+    state.pets.recruitedPets.push(pet.id);
+  }
+
+  saveGame(); renderAll(); renderPets();
+
+  const resultsHtml = pulledPets.map(pet => {
+    const color  = RARITY_COLOR[pet.rarity] || '#aaa';
+    const target = feedTarget(pet.rarity);
+    return `
+      <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.08)">
+        <span style="font-size:1.7rem;min-width:2rem;text-align:center">${pet.emoji}</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:700;font-size:.88rem">${pet.name}
+            <span style="color:${color};font-size:.7rem;margin-left:4px">${RARITY_LABEL[pet.rarity]}</span>
+          </div>
+          <div style="font-size:.7rem;color:rgba(255,255,255,.5)">需飼養 ${target} 個農作物</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  const body = `
+    <div style="font-size:.78rem;color:rgba(255,255,255,.45);margin-bottom:8px">花費 ${GACHA_COST_10}💰 · 共招募 ${pulledPets.length} 隻，飼養後可收養</div>
+    <div>${resultsHtml}</div>`;
+
+  addLog(`🎰 十連抽！花費 ${GACHA_COST_10}💰，招募到 ${pulledPets.map(p => p.emoji + p.name).join('、')}！`, 'good');
+
+  showModal({
+    emoji: '🎰', title: '十連招募！',
+    body,
+    buttons: [{ text: '去飼養', cls: 'mbtn-gold', cb: hideModal }],
+  });
 }
 
 // ── Feeding modal ─────────────────────────────────────────────────
@@ -1862,6 +2046,7 @@ function doAddPet(petId) {
   const pet = PETS[petId];
   state.pets.myPets.push({ petId });
   if (!state.pets.activePetId) state.pets.activePetId = petId;
+  state.pets.recruitedPets = (state.pets.recruitedPets || []).filter(id => id !== petId);
   delete state.pets.feeding[petId];
   addLog(`🐾 成功收養 ${pet.emoji}${pet.name}（${RARITY_LABEL[pet.rarity]}）！`, 'good');
   checkAchievements();
@@ -2074,7 +2259,9 @@ function _applyPlantToTile(idx, tileEl) {
   let actualCost = crop.seedCost;
   const totalDiscount = getPetBuffTotal('plant_discount', 'pct')
                       + getPetBuffTotal('legendary_moonrabbit', 'plant_pct')
-                      + getPetBuffTotal('mythic_worldtree', 'plant_pct');
+                      + getPetBuffTotal('legendary_seadragon', 'plant_pct')
+                      + getPetBuffTotal('mythic_worldtree', 'plant_pct')
+                      + getPetBuffTotal('mythic_time', 'plant_pct');
   if (!inStash && totalDiscount > 0) {
     actualCost = Math.max(1, Math.floor(actualCost * (1 - totalDiscount)));
   }
