@@ -62,22 +62,19 @@
     <!-- ── Bottom Panel ── -->
     <div class="bottom-panel" id="bottom-panel">
 
-      <!-- Collapse handle (mobile only) -->
-      <div class="panel-handle" id="panel-handle">
-        <div class="panel-handle-bar"></div>
-        <span class="panel-handle-arrow" id="panel-handle-arrow">▲</span>
-      </div>
+      <!-- Collapsible content (tabs + panel) -->
+      <div class="panel-collapsible" id="panel-collapsible">
 
-      <!-- Tab Bar (includes 結束今天) -->
-      <div class="tab-group">
-        <button class="tab-btn active" data-tab="shop">🏪 商店</button>
-        <button class="tab-btn"        data-tab="inventory">🏠 倉庫</button>
-        <button class="tab-btn"        data-tab="quests">📋 任務</button>
-        <button class="next-day-btn"   id="next-day-btn">🌅 結束</button>
-      </div>
+        <!-- Tab Bar (includes 結束今天) -->
+        <div class="tab-group">
+          <button class="tab-btn active" data-tab="shop">🏪 商店</button>
+          <button class="tab-btn"        data-tab="inventory">🏠 倉庫</button>
+          <button class="tab-btn"        data-tab="quests">📋 任務</button>
+          <button class="next-day-btn"   id="next-day-btn">🌅 結束</button>
+        </div>
 
-      <!-- Scrollable panel content -->
-      <div class="panels-scroll">
+        <!-- Scrollable panel content -->
+        <div class="panels-scroll">
 
         <!-- Shop Panel -->
         <div class="panel" id="panel-shop">
@@ -121,6 +118,15 @@
         </div>
 
       </div><!-- /panels-scroll -->
+
+      </div><!-- /panel-collapsible -->
+
+      <!-- Collapse handle — always at the bottom (mobile only) -->
+      <div class="panel-handle" id="panel-handle">
+        <span class="panel-handle-arrow" id="panel-handle-arrow">▼</span>
+        <div class="panel-handle-bar"></div>
+      </div>
+
     </div><!-- /bottom-panel -->
 
     </div><!-- /main-area -->

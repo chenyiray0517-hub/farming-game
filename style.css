@@ -327,32 +327,37 @@ body[data-tool="harvest"] .tile.ready:hover   { border-color: #fff; }
   transition: flex .3s cubic-bezier(.4,0,.2,1);
 }
 
-/* Collapsed: shrink to just the handle bar */
+/* panel-collapsible wraps tabs + scroll content */
+.panel-collapsible {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Collapsed: hide the collapsible section, only handle remains */
 .bottom-panel.collapsed {
   flex: 0 0 auto;
 }
-.bottom-panel.collapsed .panels-scroll,
-.bottom-panel.collapsed .tab-group {
+.bottom-panel.collapsed .panel-collapsible {
   display: none;
 }
-/* Arrow points up (▲) when collapsed = tap to expand */
-/* Arrow points down (▼) when expanded = tap to collapse */
+/* Arrow: ▼ when expanded (will collapse down), ▲ when collapsed */
 .bottom-panel.collapsed .panel-handle-arrow {
-  transform: none;
-}
-.panel-handle-arrow {
-  transform: rotate(180deg); /* ▼ when expanded */
+  transform: rotate(180deg);
 }
 
-/* Drag handle bar (mobile only) */
+/* Handle sits at the very bottom of the panel */
 .panel-handle {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 5px 0 3px;
-  background: rgba(0,0,0,.35);
+  gap: 3px;
+  padding: 4px 0 6px;
+  background: rgba(0,0,0,.44);
+  backdrop-filter: blur(8px);
   cursor: pointer;
   border-top: 1px solid var(--panel-bdr);
   -webkit-tap-highlight-color: transparent;
@@ -365,8 +370,8 @@ body[data-tool="harvest"] .tile.ready:hover   { border-color: #fff; }
   background: rgba(255,255,255,.3);
 }
 .panel-handle-arrow {
-  font-size: .55rem;
-  color: rgba(255,255,255,.4);
+  font-size: .6rem;
+  color: rgba(255,255,255,.5);
   line-height: 1;
   transition: transform .3s cubic-bezier(.4,0,.2,1);
 }
@@ -1094,11 +1099,10 @@ body[data-tool="harvest"] .tile.ready:hover   { border-color: #fff; }
     flex: none;
   }
 
-  /* Hide collapse handle on desktop */
+  /* Hide collapse handle on desktop, always show full panel */
   .panel-handle { display: none; }
   .bottom-panel.collapsed { flex: none; }
-  .bottom-panel.collapsed .panels-scroll,
-  .bottom-panel.collapsed .tab-group { display: flex; }
+  .bottom-panel.collapsed .panel-collapsible { display: flex; }
 
   .tab-group {
     border-radius: 8px 8px 0 0;
