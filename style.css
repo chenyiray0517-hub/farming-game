@@ -96,6 +96,13 @@ body {
   /* Cap farm section to ~42% of viewport so bottom panel gets plenty of room */
   max-height: 42vh;
   max-height: 42dvh;
+  transition: max-height .3s cubic-bezier(.4,0,.2,1);
+}
+
+/* When bottom panel is collapsed, farm expands to fill all available space */
+.farm-side.farm-expanded {
+  max-height: 100vh;
+  max-height: 100dvh;
 }
 
 /* ═══════════════════════════════════════

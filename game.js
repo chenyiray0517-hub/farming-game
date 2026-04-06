@@ -2155,7 +2155,9 @@ function bindEvents() {
 
   // Bottom panel collapse toggle (mobile handle)
   document.getElementById('panel-handle').addEventListener('click', () => {
+    const isCollapsing = !document.getElementById('bottom-panel').classList.contains('collapsed');
     document.getElementById('bottom-panel').classList.toggle('collapsed');
+    document.querySelector('.farm-side').classList.toggle('farm-expanded', isCollapsing);
   });
 
   // Pet FAB + sheet
