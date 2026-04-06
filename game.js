@@ -250,15 +250,24 @@ const PETS = {
 
 // ── Pet helpers ──────────────────────────────────────────────────────
 function generateDailyPets() {
+  const level = (state && state.level) || 1;
+  // Legendary/mythic weights scale up with level:
+  //   legendary: 3 + level*0.15  → lv1≈3.15, lv50≈10.5, lv100≈18
+  //   mythic:    0.5 + level*0.05 → lv1≈0.55, lv50≈3,    lv100≈5.5
+  const effectiveWeight = p => {
+    if (p.rarity === 'mythic')    return 0.5 + level * 0.05;
+    if (p.rarity === 'legendary') return 3   + level * 0.15;
+    return p.weight;
+  };
   const pool  = Object.values(PETS);
-  const total = pool.reduce((s, p) => s + p.weight, 0);
+  const total = pool.reduce((s, p) => s + effectiveWeight(p), 0);
   const selected = [];
   const used = new Set();
   let attempts = 0;
   while (selected.length < 3 && attempts < 200) {
     attempts++;
     let r = Math.random() * total;
-    const pet = pool.find(p => (r -= p.weight) < 0) || pool[0];
+    const pet = pool.find(p => (r -= effectiveWeight(p)) < 0) || pool[0];
     if (!used.has(pet.id)) { used.add(pet.id); selected.push(pet.id); }
   }
   return selected;
@@ -1595,6 +1604,20 @@ function renderPets() {
     html += '</div>';
   }
 
+  // ── Gacha ──
+  const canGacha = state.coins >= GACHA_COST;
+  html += `
+    <div class="pet-gacha-section">
+      <div class="pet-gacha-title">🎰 寵物招募</div>
+      <div class="pet-gacha-desc">花費 ${GACHA_COST} 💰 抽一隻稀有以上的寵物<br>
+        <span style="color:#ce93d8">稀有 ／ 傳奇 ／ 神話（高等級出現機率更高）</span>
+      </div>
+      <button class="pet-gacha-btn" id="gacha-pull-btn" ${canGacha ? '' : 'disabled'}>
+        🎰 招募寵物（${GACHA_COST} 💰）
+      </button>
+    </div>
+  `;
+
   // ── Daily Pets ──
   html += `<div class="pet-section-title" style="margin-top:16px">今日出現的寵物 <span style="font-size:.63rem;color:rgba(255,255,255,.4)">每天更新</span></div>`;
   html += '<div class="pet-daily-list">';
@@ -1607,9 +1630,11 @@ function renderPets() {
     const fed     = state.pets.feeding[petId] || 0;
     const done    = fed >= target;
     const pct     = Math.min(fed / target * 100, 100).toFixed(0);
-    const reqNote = (pet.rarity === 'legendary' || pet.rarity === 'mythic')
-      ? `需餵 ${target} 個 ✨高級農作`
-      : `需餵 ${target} 個農作物`;
+    const reqNote = pet.rarity === 'mythic'
+      ? `需餵 ${target} 個 🌟傳奇農作`
+      : pet.rarity === 'legendary'
+        ? `需餵 ${target} 個 ✨高級農作`
+        : `需餵 ${target} 個農作物`;
 
     html += `
       <div class="pet-card rarity-border-${pet.rarity}">
@@ -1644,6 +1669,9 @@ function renderPets() {
   body.innerHTML = html;
 
   // Bind events
+  const gachaBtn = document.getElementById('gacha-pull-btn');
+  if (gachaBtn) gachaBtn.addEventListener('click', doGachaPull);
+
   body.querySelectorAll('.pet-activate-btn').forEach(btn =>
     btn.addEventListener('click', () => { setActivePet(btn.dataset.petid); renderPets(); })
   );
@@ -1667,17 +1695,85 @@ function setActivePet(petId) {
   renderAll();
 }
 
+// ── Gacha pull ────────────────────────────────────────────────────
+const GACHA_COST = 1000;
+
+function doGachaPull() {
+  if (state.coins < GACHA_COST) {
+    showModal({
+      emoji: '💸', title: '金幣不足',
+      body: `<div class="srow">抽寵物需要 ${GACHA_COST} 💰，目前只有 ${state.coins} 💰。</div>`,
+      buttons: [{ text:'關閉', cls:'mbtn-cancel', cb: hideModal }],
+    });
+    return;
+  }
+
+  const level = state.level || 1;
+  const ownedIds = new Set((state.pets.myPets || []).map(p => p.petId));
+
+  // Build pool: rare / legendary / mythic, excluding already-owned pets
+  const pool = Object.values(PETS).filter(p =>
+    (p.rarity === 'rare' || p.rarity === 'legendary' || p.rarity === 'mythic') &&
+    !ownedIds.has(p.id)
+  );
+
+  if (pool.length === 0) {
+    showModal({
+      emoji: '🏆', title: '收藏完整！',
+      body: `<div class="srow">你已收養了所有稀有以上的寵物！</div>`,
+      buttons: [{ text:'關閉', cls:'mbtn-cancel', cb: hideModal }],
+    });
+    return;
+  }
+
+  const effectiveWeight = p => {
+    if (p.rarity === 'mythic')    return 0.5 + level * 0.05;
+    if (p.rarity === 'legendary') return 3   + level * 0.15;
+    return p.weight; // rare: 12
+  };
+  const total = pool.reduce((s, p) => s + effectiveWeight(p), 0);
+  let r = Math.random() * total;
+  const pulled = pool.find(p => (r -= effectiveWeight(p)) < 0) || pool[0];
+
+  state.coins -= GACHA_COST;
+
+  const rarityColor = RARITY_COLOR[pulled.rarity] || '#aaa';
+  const body = `
+    <div style="text-align:center;padding:10px 0">
+      <div style="font-size:3.2rem;margin-bottom:6px">${pulled.emoji}</div>
+      <div style="font-size:1.1rem;font-weight:800;margin-bottom:4px">${pulled.name}</div>
+      <div style="color:${rarityColor};font-size:.8rem;font-weight:700;margin-bottom:10px">${RARITY_LABEL[pulled.rarity]}</div>
+      <div style="font-size:.78rem;color:rgba(255,255,255,.6)">✨ ${pulled.buffDesc}</div>
+    </div>
+  `;
+
+  saveGame(); renderAll();
+
+  showModal({
+    emoji: '🎰', title: '抽到啦！',
+    body,
+    buttons: [
+      { text: '立刻收養', cls: 'mbtn-gold', cb: () => { hideModal(); completePetAdoption(pulled.id); } },
+      { text: '先不收養', cls: 'mbtn-cancel', cb: hideModal },
+    ],
+  });
+  addLog(`🎰 花費 ${GACHA_COST}💰 抽到 ${pulled.emoji}${pulled.name}（${RARITY_LABEL[pulled.rarity]}）！`, 'good');
+}
+
 // ── Feeding modal ─────────────────────────────────────────────────
 function showFeedModal(petId) {
   const pet         = PETS[petId];
-  const isLegendary = pet.rarity === 'legendary' || pet.rarity === 'mythic';
+  const isMythic    = pet.rarity === 'mythic';
+  const isLegendary = pet.rarity === 'legendary';
   const target      = feedTarget(pet.rarity);
   const fed         = state.pets.feeding[petId] || 0;
   const remaining   = target - fed;
 
-  const available = isLegendary
-    ? state.inventory.filter(i => i.quality === 'excellent')
-    : state.inventory.filter(i => i.quantity > 0);
+  const available = isMythic
+    ? state.inventory.filter(i => CROPS[i.cropId] && CROPS[i.cropId].rarity === 'legendary')
+    : isLegendary
+      ? state.inventory.filter(i => i.quality === 'excellent')
+      : state.inventory.filter(i => i.quantity > 0);
   const totalAvail = available.reduce((s, i) => s + i.quantity, 0);
   const canFeed    = Math.min(remaining, totalAvail);
 
@@ -1692,13 +1788,14 @@ function showFeedModal(petId) {
       </div>
     </div>
   `;
-  if (isLegendary) body += `<div class="srow" style="color:#e65100;font-size:.8rem">⚠️ 傳奇寵物只接受 ✨高級農作</div>`;
+  if (isMythic)    body += `<div class="srow" style="color:#7b1fa2;font-size:.8rem">⚠️ 神話寵物只接受 🌟傳奇農作（蓮花、幻晶草、星辰花、仙竹）</div>`;
+  else if (isLegendary) body += `<div class="srow" style="color:#e65100;font-size:.8rem">⚠️ 傳奇寵物只接受 ✨高級農作</div>`;
   body += `<div class="srow" style="color:#7a5a40">倉庫中可用：${totalAvail} 個</div>`;
 
   if (totalAvail === 0) {
     showModal({
       emoji: pet.emoji, title: `餵食 ${pet.name}`,
-      body: body + `<div class="srow" style="color:#c62828">倉庫沒有${isLegendary ? '高級' : ''}農作物！先去收穫吧。</div>`,
+      body: body + `<div class="srow" style="color:#c62828">倉庫沒有${isMythic ? '傳奇' : isLegendary ? '高級' : ''}農作物！先去收穫吧。</div>`,
       buttons: [{ text:'關閉', cls:'mbtn-cancel', cb: hideModal }],
     });
     return;
@@ -1715,17 +1812,20 @@ function showFeedModal(petId) {
 
 function doFeedPet(petId, qty) {
   const pet         = PETS[petId];
+  const isMythic    = pet.rarity === 'mythic';
   const isLegendary = pet.rarity === 'legendary';
   const target      = feedTarget(pet.rarity);
   const fed         = state.pets.feeding[petId] || 0;
   const remaining   = target - fed;
   const toUse       = Math.min(qty, remaining);
 
-  // Consume from inventory (legendary = excellent only)
+  // Consume from inventory (mythic = legendary crops only, legendary = excellent only)
   let left = toUse;
-  const pool = isLegendary
-    ? state.inventory.filter(i => i.quality === 'excellent')
-    : [...state.inventory];
+  const pool = isMythic
+    ? state.inventory.filter(i => CROPS[i.cropId] && CROPS[i.cropId].rarity === 'legendary')
+    : isLegendary
+      ? state.inventory.filter(i => i.quality === 'excellent')
+      : [...state.inventory];
   for (const item of pool) {
     if (left <= 0) break;
     const use = Math.min(item.quantity, left);
@@ -1736,7 +1836,7 @@ function doFeedPet(petId, qty) {
 
   const consumed = toUse - left;
   if (consumed === 0) {
-    addLog(`⚠️ 倉庫中沒有${isLegendary ? '高級' : ''}農作物！`);
+    addLog(`⚠️ 倉庫中沒有${isMythic ? '傳奇' : isLegendary ? '高級' : ''}農作物！`);
     saveGame(); renderAll(); renderPets(); return;
   }
 
