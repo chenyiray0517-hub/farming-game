@@ -324,6 +324,45 @@ body[data-tool="harvest"] .tile.ready:hover   { border-color: #fff; }
   overflow: hidden;
   min-height: 0;
   background: rgba(0,0,0,.25);
+  transition: flex .3s cubic-bezier(.4,0,.2,1);
+}
+
+/* Collapsed: shrink to just handle + tab bar */
+.bottom-panel.collapsed {
+  flex: 0 0 auto;
+}
+.bottom-panel.collapsed .panels-scroll {
+  display: none;
+}
+.bottom-panel.collapsed .panel-handle-arrow {
+  transform: rotate(180deg);
+}
+
+/* Drag handle bar (mobile only) */
+.panel-handle {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 5px 0 3px;
+  background: rgba(0,0,0,.35);
+  cursor: pointer;
+  border-top: 1px solid var(--panel-bdr);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.panel-handle:active { background: rgba(255,255,255,.06); }
+.panel-handle-bar {
+  width: 36px; height: 4px;
+  border-radius: 2px;
+  background: rgba(255,255,255,.3);
+}
+.panel-handle-arrow {
+  font-size: .55rem;
+  color: rgba(255,255,255,.4);
+  line-height: 1;
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
 }
 
 /* Tab Bar */
@@ -1048,6 +1087,11 @@ body[data-tool="harvest"] .tile.ready:hover   { border-color: #fff; }
     background: transparent;
     flex: none;
   }
+
+  /* Hide collapse handle on desktop */
+  .panel-handle { display: none; }
+  .bottom-panel.collapsed { flex: none; }
+  .bottom-panel.collapsed .panels-scroll { display: block; }
 
   .tab-group {
     border-radius: 8px 8px 0 0;

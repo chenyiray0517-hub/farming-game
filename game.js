@@ -2153,6 +2153,11 @@ function bindEvents() {
     if (e.target === e.currentTarget) hideModal();
   });
 
+  // Bottom panel collapse toggle (mobile handle)
+  document.getElementById('panel-handle').addEventListener('click', () => {
+    document.getElementById('bottom-panel').classList.toggle('collapsed');
+  });
+
   // Pet FAB + sheet
   document.getElementById('pet-fab').addEventListener('click', openPetSheet);
   document.getElementById('pet-sheet-close').addEventListener('click', closePetSheet);
