@@ -327,15 +327,21 @@ body[data-tool="harvest"] .tile.ready:hover   { border-color: #fff; }
   transition: flex .3s cubic-bezier(.4,0,.2,1);
 }
 
-/* Collapsed: shrink to just handle + tab bar */
+/* Collapsed: shrink to just the handle bar */
 .bottom-panel.collapsed {
   flex: 0 0 auto;
 }
-.bottom-panel.collapsed .panels-scroll {
+.bottom-panel.collapsed .panels-scroll,
+.bottom-panel.collapsed .tab-group {
   display: none;
 }
+/* Arrow points up (▲) when collapsed = tap to expand */
+/* Arrow points down (▼) when expanded = tap to collapse */
 .bottom-panel.collapsed .panel-handle-arrow {
-  transform: rotate(180deg);
+  transform: none;
+}
+.panel-handle-arrow {
+  transform: rotate(180deg); /* ▼ when expanded */
 }
 
 /* Drag handle bar (mobile only) */
@@ -1091,7 +1097,8 @@ body[data-tool="harvest"] .tile.ready:hover   { border-color: #fff; }
   /* Hide collapse handle on desktop */
   .panel-handle { display: none; }
   .bottom-panel.collapsed { flex: none; }
-  .bottom-panel.collapsed .panels-scroll { display: block; }
+  .bottom-panel.collapsed .panels-scroll,
+  .bottom-panel.collapsed .tab-group { display: flex; }
 
   .tab-group {
     border-radius: 8px 8px 0 0;
