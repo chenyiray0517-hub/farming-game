@@ -1008,11 +1008,12 @@ function doAdvanceDay() {
   });
   state.pets.newPets = true;
 
-  // 招募寵物超過 3 天自動消失
+  // 招募寵物超過 3 天自動消失（沒有記錄招募天的視為已超期）
   const RECRUIT_EXPIRE_DAYS = 3;
   const expired = (state.pets.recruitedPets || []).filter(id => {
     const recruitedDay = state.pets.recruitedDays[id];
-    return recruitedDay !== undefined && (state.day - recruitedDay) >= RECRUIT_EXPIRE_DAYS;
+    if (recruitedDay === undefined) return true; // 舊資料沒有記錄，直接過期
+    return (state.day - recruitedDay) >= RECRUIT_EXPIRE_DAYS;
   });
   if (expired.length > 0) {
     expired.forEach(id => {
