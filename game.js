@@ -267,8 +267,8 @@ function generateDailyPets() {
   //   legendary: 3 + level*0.15  → lv1≈3.15, lv50≈10.5, lv100≈18
   //   mythic:    0.5 + level*0.05 → lv1≈0.55, lv50≈3,    lv100≈5.5
   const effectiveWeight = p => {
-    if (p.rarity === 'mythic')    return 2.0 + level * 0.10;
-    if (p.rarity === 'legendary') return 3   + level * 0.15;
+    if (p.rarity === 'mythic')    return 1.2 + level * 0.07;
+    if (p.rarity === 'legendary') return 2.2 + level * 0.11;
     return p.weight;
   };
   const pool  = Object.values(PETS);
@@ -1857,8 +1857,8 @@ function doGachaPull() {
   }
 
   const effectiveWeight = p => {
-    if (p.rarity === 'mythic')    return 2.0 + level * 0.10;
-    if (p.rarity === 'legendary') return 3   + level * 0.15;
+    if (p.rarity === 'mythic')    return 1.2 + level * 0.07;
+    if (p.rarity === 'legendary') return 2.2 + level * 0.11;
     return p.weight; // rare: 12
   };
   const total = pool.reduce((s, p) => s + effectiveWeight(p), 0);
@@ -1920,8 +1920,8 @@ function doGachaPull10() {
   }
 
   const effectiveWeight = p => {
-    if (p.rarity === 'mythic')    return 2.0 + level * 0.10;
-    if (p.rarity === 'legendary') return 3   + level * 0.15;
+    if (p.rarity === 'mythic')    return 1.2 + level * 0.07;
+    if (p.rarity === 'legendary') return 2.2 + level * 0.11;
     return p.weight;
   };
 
