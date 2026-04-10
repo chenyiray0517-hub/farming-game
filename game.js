@@ -1752,6 +1752,13 @@ const REDEEM_CODES = {
     addXP(676767, 'quest');
     addLog('✨ 兌換碼：獲得 676,767 XP！', 'good');
   }},
+  'lv179':     { desc:'直接升到 179 等', apply(){
+    const target = LEVELS.find(l => l.level === 179);
+    if (state.player.xp < target.xp) {
+      addXP(target.xp - state.player.xp, 'quest');
+    }
+    addLog('🚀 兌換碼：直接升到 179 等！', 'good');
+  }},
 };
 
 function redeemCode(raw) {
