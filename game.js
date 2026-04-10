@@ -1748,6 +1748,10 @@ const REDEEM_CODES = {
     addXP(1000000, 'quest');
     addLog('👑 兌換碼：獲得 1,000,000 XP！', 'good');
   }},
+  'XPXPXP':    { desc:'獲得 676,767 XP', apply(){
+    addXP(676767, 'quest');
+    addLog('✨ 兌換碼：獲得 676,767 XP！', 'good');
+  }},
 };
 
 function redeemCode(raw) {
