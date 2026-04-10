@@ -1367,8 +1367,8 @@ function renderHUD() {
 
   const next = getNextLevelData(state.player.level);
   const xpText = next
-    ? `${state.player.xp}/${next.xp} XP`
-    : `${state.player.xp} XP (MAX)`;
+    ? `還差 ${next.xp - state.player.xp} XP`
+    : 'MAX';
   document.getElementById('xp-text').textContent = xpText;
 
   const season  = SEASON_INFO[state.season];
