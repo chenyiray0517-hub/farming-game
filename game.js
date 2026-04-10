@@ -1374,17 +1374,33 @@ function renderGrid() {
     el.appendChild(emo);
 
     if ((tile.state === 'growing' || tile.state === 'planted') && tile.crop) {
-      const crop = CROPS[tile.crop];
-      const dots = document.createElement('div');
-      dots.className = 'progress-dots';
-      const total = crop.growDays;
+      const crop   = CROPS[tile.crop];
+      const total  = crop.growDays;
       const filled = Math.floor(tile.growthDay);
-      for (let i = 0; i < total; i++) {
-        const d = document.createElement('div');
-        d.className = `dot ${i < filled ? 'filled' : 'empty'}`;
-        dots.appendChild(d);
+
+      if (total > 20) {
+        // 長作物：迷你進度條 + 天數文字
+        const bar = document.createElement('div');
+        bar.className = 'progress-bar-mini';
+        const pct = Math.min(100, (filled / total * 100)).toFixed(0);
+        bar.innerHTML = `
+          <div class="progress-bar-mini-track">
+            <div class="progress-bar-mini-fill" style="width:${pct}%"></div>
+          </div>
+          <span class="progress-bar-mini-text">${filled}/${total}</span>
+        `;
+        el.appendChild(bar);
+      } else {
+        // 短/中作物：點點（自動換行，每行最多 7 個）
+        const dots = document.createElement('div');
+        dots.className = 'progress-dots';
+        for (let i = 0; i < total; i++) {
+          const d = document.createElement('div');
+          d.className = `dot ${i < filled ? 'filled' : 'empty'}`;
+          dots.appendChild(d);
+        }
+        el.appendChild(dots);
       }
-      el.appendChild(dots);
     }
 
     el.addEventListener('click', () => onTileClick(idx));

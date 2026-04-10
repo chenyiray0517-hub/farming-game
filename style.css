@@ -173,10 +173,45 @@ body {
   font-size: .5rem; line-height: 1;
 }
 
-.progress-dots { position: absolute; bottom: 2px; display: flex; gap: 2px; }
-.dot { width: 4px; height: 4px; border-radius: 50%; border: 1px solid rgba(255,255,255,.4); }
+.progress-dots {
+  position: absolute;
+  bottom: 2px; left: 2px; right: 2px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  justify-content: center;
+}
+.dot { width: 4px; height: 4px; border-radius: 50%; border: 1px solid rgba(255,255,255,.35); flex-shrink: 0; }
 .dot.filled { background: rgba(255,255,255,.9); }
-.dot.empty  { background: rgba(0,0,0,.2); }
+.dot.empty  { background: rgba(0,0,0,.25); }
+
+/* Mini progress bar for very long crops (> 20 days) */
+.progress-bar-mini {
+  position: absolute;
+  bottom: 3px; left: 3px; right: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+.progress-bar-mini-track {
+  width: 100%; height: 4px;
+  background: rgba(0,0,0,.3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-bar-mini-fill {
+  height: 100%;
+  background: rgba(255,255,255,.85);
+  border-radius: 2px;
+  transition: width .3s;
+}
+.progress-bar-mini-text {
+  font-size: .45rem;
+  color: rgba(255,255,255,.8);
+  font-weight: 700;
+  line-height: 1;
+}
 
 /* ── Drag cursors (water bucket + seed) ── */
 .seed-bag-follow {
