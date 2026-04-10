@@ -1431,6 +1431,7 @@ function renderShop() {
 
       const btn = document.createElement('button');
       btn.className = `seed-btn${selected ? ' selected' : ''}${locked ? ' locked' : (!canAfford ? ' cant-afford' : '')}`;
+      btn.dataset.rarity = rarity;
 
       const seasonMark = (!crop.seasons || inSeason) ? '' : `<span style="color:#ff8a65;font-size:.6rem">⚠️季外</span>`;
       const stashQty   = state.seedStash[crop.id] || 0;
