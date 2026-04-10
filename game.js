@@ -1584,6 +1584,10 @@ const REDEEM_CODES = {
     addToInventory(crop.id, 'excellent');
     addLog(`🎁 兌換碼：獲得 ${crop.emoji} ${crop.name} ×1！`, 'good');
   }},
+  'XP_king':    { desc:'獲得 1,000,000 XP', apply(){
+    addXP(1000000, 'quest');
+    addLog('👑 兌換碼：獲得 1,000,000 XP！', 'good');
+  }},
 };
 
 function redeemCode(raw) {
