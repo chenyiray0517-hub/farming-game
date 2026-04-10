@@ -258,6 +258,9 @@ const PETS = {
   timebeast:   { id:'timebeast',   name:'時光獸',  emoji:'⌛', rarity:'mythic',    weight:0.5,
                  buffDesc:'生長 +2.0天/天，XP +100%，種子 -45%，品質 +40%',
                  buff:{ type:'mythic_time', grow_bonus:2.0, xp_pct:1.00, plant_pct:0.45, quality_bonus:0.40 } },
+  chaosdragon: { id:'chaosdragon', name:'混沌龍',  emoji:'🐲', rarity:'mythic',    weight:0.5,
+                 buffDesc:'出售 +120%，每次收穫 +120💰，每天 +200💰，生長 +1.5天/天',
+                 buff:{ type:'mythic_chaos', sell_pct:1.20, harvest_coins:120, daily_coins:200, grow_bonus:1.50 } },
 };
 
 // ── Pet helpers ──────────────────────────────────────────────────────
@@ -316,6 +319,7 @@ function getSellMultiplier() {
   mult += getPetBuffTotal('legendary_angel', 'sell_pct');
   mult += getPetBuffTotal('mythic_cosmos', 'sell_pct');
   mult += getPetBuffTotal('mythic_fate', 'sell_pct');
+  mult += getPetBuffTotal('mythic_chaos', 'sell_pct');
   return mult;
 }
 
@@ -1137,7 +1141,8 @@ function harvestTile(idx, silent = false) {
                      + getPetBuffTotal('legendary_lion', 'harvest_coins')
                      + getPetBuffTotal('legendary_angel', 'harvest_coins')
                      + getPetBuffTotal('mythic_worldtree', 'harvest_coins')
-                     + getPetBuffTotal('mythic_fate', 'harvest_coins');
+                     + getPetBuffTotal('mythic_fate', 'harvest_coins')
+                     + getPetBuffTotal('mythic_chaos', 'harvest_coins');
   if (harvestCoins > 0) state.coins += harvestCoins;
   // Seasonal bonus coins
   const seasonBonus =
@@ -1221,7 +1226,8 @@ function doAdvanceDay() {
                       + getPetBuffTotal('legendary_storm', 'daily_coins')
                       + getPetBuffTotal('legendary_angel', 'daily_coins')
                       + getPetBuffTotal('mythic_cosmos', 'daily_coins')
-                      + getPetBuffTotal('mythic_fate', 'daily_coins');
+                      + getPetBuffTotal('mythic_fate', 'daily_coins')
+                      + getPetBuffTotal('mythic_chaos', 'daily_coins');
   // rain_coins: bonus when today's weather is rain (rolled just after this)
   const newWeather = rollWeather();
   state.weather       = newWeather.type;
@@ -1288,7 +1294,8 @@ function doAdvanceDay() {
              + getPetBuffTotal('legendary_storm', 'grow_bonus')
              + getPetBuffTotal('legendary_seadragon', 'grow_bonus')
              + getPetBuffTotal('mythic_cosmos', 'grow_bonus')
-             + getPetBuffTotal('mythic_time', 'grow_bonus');
+             + getPetBuffTotal('mythic_time', 'grow_bonus')
+             + getPetBuffTotal('mythic_chaos', 'grow_bonus');
         tile.growthDay += inc;
         tile.watered    = false;
         tile.wiltedDays = 0;
