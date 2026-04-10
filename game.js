@@ -473,15 +473,47 @@ function xpForLevel(level) {
 // 5. ACHIEVEMENTS
 // ============================================================
 const ACHIEVEMENTS = {
-  first_plant:   { name:'🌱 初次種植', desc:'種下第一顆種子',        xp:10,  check: s => s.stats.totalPlanted >= 1 },
-  rich_farmer:   { name:'💰 富農',     desc:'持有超過 1000 金幣',     xp:20,  check: s => s.coins >= 1000 },
-  harvest_king:  { name:'🌾 豐收王',   desc:'同一天收穫超過 10 格',   xp:30,  check: s => s.stats.todayHarvest >= 10 },
-  rain_harvest:  { name:'☔ 雨天農夫', desc:'在下雨天收穫作物',        xp:20,  check: s => s.stats.rainHarvest >= 1 },
-  level_5:       { name:'⭐ 農場主',   desc:'達到 Lv.5',              xp:50,  check: s => s.player.level >= 5 },
-  legend_farmer: { name:'🏆 傳奇農夫', desc:'達到 Lv.20',             xp:200, check: s => s.player.level >= 20 },
-  first_pet:     { name:'🐾 初次收養', desc:'第一次收養寵物',           xp:20,  check: s => !!(s.pets && s.pets.myPets && s.pets.myPets.length > 0) },
-  legend_pet:    { name:'🐉 傳說馴獸師', desc:'收養一隻傳奇寵物',       xp:100, check: s => !!(s.pets && s.pets.myPets && s.pets.myPets.some(p => PETS[p.petId] && PETS[p.petId].rarity === 'legendary')) },
-  full_house:    { name:'🏠 滿員農場', desc:'同時飼養 5 隻寵物',        xp:60,  check: s => !!(s.pets && s.pets.myPets && s.pets.myPets.length >= 5) },
+  // ── 入門 ────────────────────────────────────────────────────────
+  first_plant:     { name:'🌱 初次種植',   desc:'種下第一顆種子',              xp:10,   check: s => s.stats.totalPlanted >= 1 },
+  first_harvest:   { name:'🌾 初次收穫',   desc:'收穫第一格作物',              xp:10,   check: s => s.stats.totalHarvested >= 1 },
+  first_pet:       { name:'🐾 初次收養',   desc:'第一次收養寵物',              xp:20,   check: s => !!(s.pets?.myPets?.length > 0) },
+  rain_harvest:    { name:'☔ 雨天農夫',   desc:'在下雨天收穫作物',            xp:20,   check: s => s.stats.rainHarvest >= 1 },
+  level_5:         { name:'⭐ 見習農',     desc:'達到 Lv.5',                   xp:50,   check: s => s.player.level >= 5 },
+  day_10:          { name:'📅 十日老手',   desc:'遊戲進行到第 10 天',           xp:30,   check: s => s.day >= 10 },
+  // ── 普通 ────────────────────────────────────────────────────────
+  rich_farmer:     { name:'💰 小富農',     desc:'持有 5,000 金幣',             xp:50,   check: s => s.coins >= 5000 },
+  plant_100:       { name:'🌿 勤奮農夫',   desc:'累計種植 100 格',             xp:60,   check: s => s.stats.totalPlanted >= 100 },
+  harvest_100:     { name:'🧺 百穫農夫',   desc:'累計收穫 100 格',             xp:60,   check: s => s.stats.totalHarvested >= 100 },
+  water_100:       { name:'💧 澆水達人',   desc:'累計澆水 100 次',             xp:40,   check: s => s.stats.totalWatered >= 100 },
+  harvest_king:    { name:'🌾 豐收王',     desc:'單日收穫超過 15 格',          xp:80,   check: s => s.stats.maxDayHarvest >= 15 },
+  rain_10:         { name:'🌧️ 雨中農神',  desc:'下雨天累計收穫 10 次',        xp:50,   check: s => s.stats.rainHarvest >= 10 },
+  pet_trio:        { name:'🐾 三寵齊聚',   desc:'同時收養 3 隻寵物',           xp:60,   check: s => !!(s.pets?.myPets?.length >= 3) },
+  level_20:        { name:'🏆 農場主',     desc:'達到 Lv.20',                  xp:150,  check: s => s.player.level >= 20 },
+  day_30:          { name:'📅 月農',       desc:'遊戲進行到第 30 天',           xp:80,   check: s => s.day >= 30 },
+  // ── 困難 ────────────────────────────────────────────────────────
+  wealthy:         { name:'💎 富甲一方',   desc:'持有 50,000 金幣',            xp:200,  check: s => s.coins >= 50000 },
+  plant_500:       { name:'🌾 萬畝良田',   desc:'累計種植 500 格',             xp:200,  check: s => s.stats.totalPlanted >= 500 },
+  harvest_500:     { name:'🧺 五百豐收',   desc:'累計收穫 500 格',             xp:200,  check: s => s.stats.totalHarvested >= 500 },
+  water_500:       { name:'🚿 澆水狂人',   desc:'累計澆水 500 次',             xp:150,  check: s => s.stats.totalWatered >= 500 },
+  harvest_day_25:  { name:'⚡ 閃電農夫',   desc:'單日收穫超過 25 格',          xp:200,  check: s => s.stats.maxDayHarvest >= 25 },
+  earn_100k:       { name:'💰 百萬商人',   desc:'累計賺取 100,000 金幣',       xp:300,  check: s => s.stats.totalCoinsEarned >= 100000 },
+  rain_50:         { name:'⛈️ 雷雨戰士',  desc:'下雨天累計收穫 50 次',        xp:200,  check: s => s.stats.rainHarvest >= 50 },
+  legend_pet:      { name:'🐉 傳說馴獸師', desc:'收養一隻傳奇寵物',            xp:200,  check: s => !!(s.pets?.myPets?.some(p => PETS[p.petId]?.rarity === 'legendary')) },
+  full_house:      { name:'🏠 滿員農場',   desc:'同時收養 5 隻寵物',           xp:200,  check: s => !!(s.pets?.myPets?.length >= 5) },
+  level_50:        { name:'🌟 農業大師',   desc:'達到 Lv.50',                  xp:500,  check: s => s.player.level >= 50 },
+  day_100:         { name:'📅 百日農神',   desc:'遊戲進行到第 100 天',          xp:300,  check: s => s.day >= 100 },
+  // ── 傳奇 ────────────────────────────────────────────────────────
+  millionaire:     { name:'👑 千萬富翁',   desc:'持有 999,999 金幣',           xp:1000, check: s => s.coins >= 999999 },
+  plant_1000:      { name:'🗺️ 開疆拓土',  desc:'累計種植 1,000 格',           xp:500,  check: s => s.stats.totalPlanted >= 1000 },
+  harvest_1500:    { name:'🏅 千秋豐穰',   desc:'累計收穫 1,500 格',           xp:500,  check: s => s.stats.totalHarvested >= 1500 },
+  water_2000:      { name:'🌊 水神降臨',   desc:'累計澆水 2,000 次',           xp:400,  check: s => s.stats.totalWatered >= 2000 },
+  harvest_day_36:  { name:'🔥 全場大豐收', desc:'單日收穫滿 36 格',            xp:600,  check: s => s.stats.maxDayHarvest >= 36 },
+  earn_1m:         { name:'💰 億萬農王',   desc:'累計賺取 1,000,000 金幣',     xp:1000, check: s => s.stats.totalCoinsEarned >= 1000000 },
+  rain_100:        { name:'🌈 四季雨神',   desc:'下雨天累計收穫 100 次',       xp:400,  check: s => s.stats.rainHarvest >= 100 },
+  mythic_pet:      { name:'✨ 神話馴獸師', desc:'收養一隻神話寵物',            xp:500,  check: s => !!(s.pets?.myPets?.some(p => PETS[p.petId]?.rarity === 'mythic')) },
+  dual_mythic:     { name:'🌌 雙神降世',   desc:'同時擁有 2 隻神話寵物',       xp:1000, check: s => !!(s.pets?.myPets?.filter(p => PETS[p.petId]?.rarity === 'mythic').length >= 2) },
+  level_100:       { name:'🏆 永恆神農',   desc:'達到 Lv.100',                 xp:2000, check: s => s.player.level >= 100 },
+  day_365:         { name:'🗓️ 一年農夫',  desc:'遊戲進行到第 365 天',          xp:1000, check: s => s.day >= 365 },
 };
 
 // ============================================================
@@ -578,7 +610,7 @@ function freshState() {
     log:          ['🌾 歡迎來到農場！'],
     stats: {
       totalPlanted:0, totalHarvested:0, totalCoinsEarned:0,
-      todayHarvest:0, rainHarvest:0,
+      todayHarvest:0, rainHarvest:0, totalWatered:0, maxDayHarvest:0,
     },
     questProgress:  { earn:0 },
     dayTimeLeft:    120,   // seconds remaining to plant this day (2 minutes)
@@ -614,8 +646,10 @@ function loadGame() {
     if (!s.achievements)   s.achievements = {};
     if (!s.weatherEffect)  s.weatherEffect = null;
     if (!s.questProgress)  s.questProgress = { earn: 0 };
-    if (!s.stats.todayHarvest)       s.stats.todayHarvest = 0;
-    if (!s.stats.rainHarvest)        s.stats.rainHarvest  = 0;
+    if (!s.stats.todayHarvest)       s.stats.todayHarvest  = 0;
+    if (!s.stats.rainHarvest)        s.stats.rainHarvest   = 0;
+    if (!s.stats.totalWatered)       s.stats.totalWatered  = 0;
+    if (!s.stats.maxDayHarvest)      s.stats.maxDayHarvest = 0;
     if (s.dayTimeLeft === undefined)  s.dayTimeLeft = 120;
     if (!s.pets) s.pets = { myPets: [], activePetId: null, dailyPets: [], newPets: false, feeding: {} };
     if (!s.pets.myPets)   s.pets.myPets   = [];
@@ -905,6 +939,7 @@ function waterTile(idx) {
     addLog(`💧 澆水：${CROPS[tile.crop].emoji} ${CROPS[tile.crop].name}`);
   }
 
+  state.stats.totalWatered++;
   addXP(XP_FOR.water, 'water');
   const waterXpBonus = getPetBuffTotal('water_xp', 'amount');
   if (waterXpBonus > 0) addXP(waterXpBonus, 'water_bonus');
@@ -963,6 +998,8 @@ function harvestTile(idx, silent = false) {
 
   state.stats.totalHarvested++;
   state.stats.todayHarvest++;
+  if (state.stats.todayHarvest > state.stats.maxDayHarvest)
+    state.stats.maxDayHarvest = state.stats.todayHarvest;
   updateQuestProgress('harvest', 1);
   addXP(XP_FOR.harvest, 'harvest');
 
