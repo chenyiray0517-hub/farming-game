@@ -2500,6 +2500,7 @@ function _applyWaterToTile(idx, tileEl) {
   } else {
     addLog(`💧 澆水：${CROPS[tile.crop].emoji} ${CROPS[tile.crop].name}`);
   }
+  state.stats.totalWatered++;
   addXP(XP_FOR.water, 'water');
   const waterXpBonus = getPetBuffTotal('water_xp', 'amount');
   if (waterXpBonus > 0) addXP(waterXpBonus, 'water_bonus');
