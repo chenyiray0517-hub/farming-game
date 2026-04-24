@@ -2048,7 +2048,7 @@ function renderPets() {
       const done    = fed >= target;
       const pct     = Math.min(fed / target * 100, 100).toFixed(0);
       const reqNote = pet.rarity === 'mythic'
-        ? `需餵 ${target} 個 🌟傳奇農作`
+        ? `需餵 ${target} 個 🌟傳奇／神話農作`
         : pet.rarity === 'legendary'
           ? `需餵 ${target} 個 ✨高級農作`
           : `需餵 ${target} 個農作物`;
@@ -2345,7 +2345,7 @@ function showFeedModal(petId) {
   const remaining   = target - fed;
 
   const available = isMythic
-    ? state.inventory.filter(i => CROPS[i.cropId] && CROPS[i.cropId].rarity === 'legendary')
+    ? state.inventory.filter(i => CROPS[i.cropId] && (CROPS[i.cropId].rarity === 'legendary' || CROPS[i.cropId].rarity === 'mythic'))
     : isLegendary
       ? state.inventory.filter(i => i.quality === 'excellent')
       : state.inventory.filter(i => i.quantity > 0);
@@ -2363,14 +2363,14 @@ function showFeedModal(petId) {
       </div>
     </div>
   `;
-  if (isMythic)    body += `<div class="srow" style="color:#7b1fa2;font-size:.8rem">⚠️ 神話寵物只接受 🌟傳奇農作（蓮花、幻晶草、星辰花、仙竹）</div>`;
+  if (isMythic)    body += `<div class="srow" style="color:#7b1fa2;font-size:.8rem">⚠️ 神話寵物接受 🌟傳奇農作 或 ✨神話農作</div>`;
   else if (isLegendary) body += `<div class="srow" style="color:#e65100;font-size:.8rem">⚠️ 傳奇寵物只接受 ✨高級農作</div>`;
   body += `<div class="srow" style="color:#7a5a40">倉庫中可用：${totalAvail} 個</div>`;
 
   if (totalAvail === 0) {
     showModal({
       emoji: pet.emoji, title: `餵食 ${pet.name}`,
-      body: body + `<div class="srow" style="color:#c62828">倉庫沒有${isMythic ? '傳奇' : isLegendary ? '高級' : ''}農作物！先去收穫吧。</div>`,
+      body: body + `<div class="srow" style="color:#c62828">倉庫沒有${isMythic ? '傳奇／神話' : isLegendary ? '高級' : ''}農作物！先去收穫吧。</div>`,
       buttons: [{ text:'關閉', cls:'mbtn-cancel', cb: hideModal }],
     });
     return;
@@ -2394,10 +2394,10 @@ function doFeedPet(petId, qty) {
   const remaining   = target - fed;
   const toUse       = Math.min(qty, remaining);
 
-  // Consume from inventory (mythic = legendary crops only, legendary = excellent only)
+  // Consume from inventory (mythic = legendary or mythic crops, legendary = excellent only)
   let left = toUse;
   const pool = isMythic
-    ? state.inventory.filter(i => CROPS[i.cropId] && CROPS[i.cropId].rarity === 'legendary')
+    ? state.inventory.filter(i => CROPS[i.cropId] && (CROPS[i.cropId].rarity === 'legendary' || CROPS[i.cropId].rarity === 'mythic'))
     : isLegendary
       ? state.inventory.filter(i => i.quality === 'excellent')
       : [...state.inventory];
@@ -2411,7 +2411,7 @@ function doFeedPet(petId, qty) {
 
   const consumed = toUse - left;
   if (consumed === 0) {
-    addLog(`⚠️ 倉庫中沒有${isMythic ? '傳奇' : isLegendary ? '高級' : ''}農作物！`);
+    addLog(`⚠️ 倉庫中沒有${isMythic ? '傳奇／神話' : isLegendary ? '高級' : ''}農作物！`);
     saveGame(); renderAll(); renderPets(); return;
   }
 
