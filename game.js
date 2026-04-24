@@ -2028,7 +2028,7 @@ function renderPets() {
           🎰 單抽（${GACHA_COST} 💰）
         </button>
         <button class="pet-gacha-btn pet-gacha-btn10" id="gacha-pull10-btn" ${canGacha10 ? '' : 'disabled'}>
-          🎰×10 十連抽（${GACHA_COST_10} 💰）<span class="gacha-discount-badge">9折</span>
+          🎰×10 十連抽（${GACHA_COST_10} 💰）
         </button>
       </div>
     </div>
@@ -2186,8 +2186,8 @@ function setActivePet(petId) {
 }
 
 // ── Gacha pull ────────────────────────────────────────────────────
-const GACHA_COST    = 1000;
-const GACHA_COST_10 = 9000; // 10連抽，9折優惠
+const GACHA_COST    = 10000;
+const GACHA_COST_10 = 100000; // 10連抽
 
 function doGachaPull() {
   if (state.coins < GACHA_COST) {
