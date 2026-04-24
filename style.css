@@ -1178,6 +1178,71 @@ body[data-tool="harvest"] .tile.ready:hover   { border-color: #fff; }
 }
 
 /* ═══════════════════════════════════════
+   PET LEVEL SYSTEM
+   ═══════════════════════════════════════ */
+.pet-level-badge {
+  display: inline-block;
+  font-size: .58rem;
+  font-weight: 900;
+  padding: 1px 5px;
+  border-radius: 7px;
+  background: rgba(255,215,0,.18);
+  border: 1px solid rgba(255,215,0,.55);
+  color: var(--gold);
+  margin-left: 4px;
+  vertical-align: middle;
+  letter-spacing: .02em;
+}
+
+.pet-levelup-btn {
+  padding: 4px 8px;
+  border-radius: 9px;
+  border: 1px solid rgba(255,215,0,.5);
+  background: rgba(255,215,0,.12);
+  color: var(--gold);
+  font-size: .66rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  min-height: 26px;
+  white-space: nowrap;
+  transition: background .13s;
+  -webkit-tap-highlight-color: transparent;
+}
+.pet-levelup-btn:active { background: rgba(255,215,0,.28); transform: scale(.95); }
+
+.pet-maxlv-tag {
+  font-size: .62rem;
+  font-weight: 800;
+  color: #e040fb;
+  padding: 3px 7px;
+  border-radius: 8px;
+  border: 1px solid rgba(224,64,251,.5);
+  background: rgba(224,64,251,.14);
+  white-space: nowrap;
+  text-align: center;
+  animation: mythicGlow 2s ease-in-out infinite;
+}
+
+.pet-expand-slots-btn {
+  padding: 3px 9px;
+  border-radius: 8px;
+  border: 1px solid rgba(100,181,246,.45);
+  background: rgba(100,181,246,.1);
+  color: #90caf9;
+  font-size: .62rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  min-height: 24px;
+  transition: background .13s;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+.pet-expand-slots-btn:active { background: rgba(100,181,246,.25); }
+
+/* ═══════════════════════════════════════
    DESKTOP override (≥ 700px)
    ═══════════════════════════════════════ */
 @media (min-width: 700px) {

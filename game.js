@@ -125,16 +125,24 @@ const CROPS = {
   cherry:      { id:'cherry',      name:'櫻桃',     emoji:'🍒', rarity:'rare',      seedCost:85,   sellPrice:290,  growDays:11, seasons:['spring'],                unlockLevel:50 },
   blueberry:   { id:'blueberry',   name:'藍莓',     emoji:'🫐', rarity:'rare',      seedCost:95,   sellPrice:320,  growDays:13, seasons:['summer'],                unlockLevel:55 },
   // ── 高級（收穫必為高級品質）──────────────────────────────────────
-  peach:       { id:'peach',       name:'水蜜桃',   emoji:'🍑', rarity:'premium',   seedCost:140,  sellPrice:460,  growDays:15, seasons:['spring'],  unlockLevel:60, alwaysExcellent:true },
-  coconut:     { id:'coconut',     name:'椰子',     emoji:'🥥', rarity:'premium',   seedCost:300,  sellPrice:950,  growDays:20, seasons:['summer'],  unlockLevel:65, alwaysExcellent:true },
-  rose:        { id:'rose',        name:'玫瑰',     emoji:'🌹', rarity:'premium',   seedCost:220,  sellPrice:700,  growDays:17, seasons:['spring'],  unlockLevel:70, alwaysExcellent:true },
+  peach:       { id:'peach',       name:'水蜜桃',   emoji:'🍑', rarity:'premium',   seedCost:140,  sellPrice:460,  growDays:15, seasons:['spring'],          unlockLevel:60,  alwaysExcellent:true },
+  mango:       { id:'mango',       name:'芒果',     emoji:'🥭', rarity:'premium',   seedCost:170,  sellPrice:550,  growDays:16, seasons:['summer'],          unlockLevel:62,  alwaysExcellent:true },
+  coconut:     { id:'coconut',     name:'椰子',     emoji:'🥥', rarity:'premium',   seedCost:300,  sellPrice:950,  growDays:20, seasons:['summer'],          unlockLevel:65,  alwaysExcellent:true },
+  pineapple:   { id:'pineapple',   name:'鳳梨',     emoji:'🍍', rarity:'premium',   seedCost:255,  sellPrice:820,  growDays:18, seasons:['summer','spring'], unlockLevel:67,  alwaysExcellent:true },
+  rose:        { id:'rose',        name:'玫瑰',     emoji:'🌹', rarity:'premium',   seedCost:220,  sellPrice:700,  growDays:17, seasons:['spring'],          unlockLevel:70,  alwaysExcellent:true },
+  olive:       { id:'olive',       name:'橄欖',     emoji:'🫒', rarity:'premium',   seedCost:300,  sellPrice:960,  growDays:19, seasons:['autumn'],          unlockLevel:73,  alwaysExcellent:true },
   // ── 傳奇（收穫必為高級品質）──────────────────────────────────────
-  lotus:       { id:'lotus',       name:'蓮花',     emoji:'🪷', rarity:'legendary', seedCost:500,  sellPrice:1600, growDays:22, seasons:null,        unlockLevel:75, alwaysExcellent:true },
-  crystalHerb: { id:'crystalHerb', name:'幻晶草',   emoji:'🔮', rarity:'legendary', seedCost:700,  sellPrice:2200, growDays:28, seasons:null,        unlockLevel:80, alwaysExcellent:true },
-  starBlossom: { id:'starBlossom', name:'星辰花',   emoji:'🌠', rarity:'legendary', seedCost:950,  sellPrice:3000, growDays:34, seasons:['winter'],  unlockLevel:85, alwaysExcellent:true },
-  sacredBamboo:{ id:'sacredBamboo',name:'仙竹',     emoji:'🎋', rarity:'legendary', seedCost:1200, sellPrice:4200, growDays:40, seasons:null,        unlockLevel:90, alwaysExcellent:true },
+  lotus:       { id:'lotus',       name:'蓮花',     emoji:'🪷', rarity:'legendary', seedCost:500,  sellPrice:1600, growDays:22, seasons:null,                unlockLevel:75,  alwaysExcellent:true },
+  darkMoon:    { id:'darkMoon',    name:'暗月花',   emoji:'🌺', rarity:'legendary', seedCost:640,  sellPrice:2000, growDays:25, seasons:null,                unlockLevel:77,  alwaysExcellent:true },
+  crystalHerb: { id:'crystalHerb', name:'幻晶草',   emoji:'🔮', rarity:'legendary', seedCost:700,  sellPrice:2200, growDays:28, seasons:null,                unlockLevel:80,  alwaysExcellent:true },
+  shenHerb:    { id:'shenHerb',    name:'神農草',   emoji:'🍀', rarity:'legendary', seedCost:870,  sellPrice:2850, growDays:31, seasons:null,                unlockLevel:83,  alwaysExcellent:true },
+  starBlossom: { id:'starBlossom', name:'星辰花',   emoji:'🌠', rarity:'legendary', seedCost:950,  sellPrice:3000, growDays:34, seasons:['winter'],          unlockLevel:85,  alwaysExcellent:true },
+  auroraGem:   { id:'auroraGem',   name:'極光晶',   emoji:'🌼', rarity:'legendary', seedCost:1100, sellPrice:3600, growDays:37, seasons:['winter'],          unlockLevel:88,  alwaysExcellent:true },
+  sacredBamboo:{ id:'sacredBamboo',name:'仙竹',     emoji:'🎋', rarity:'legendary', seedCost:1200, sellPrice:4200, growDays:40, seasons:null,                unlockLevel:90,  alwaysExcellent:true },
   // ── 神話（收穫必為高級品質）──────────────────────────────────────
-  rainbowFruit:{ id:'rainbowFruit',name:'彩虹果',   emoji:'🌈', rarity:'mythic',    seedCost:3000, sellPrice:12000,growDays:55, seasons:null,        unlockLevel:100,alwaysExcellent:true },
+  rainbowFruit:{ id:'rainbowFruit',name:'彩虹果',   emoji:'🌈', rarity:'mythic',    seedCost:3000, sellPrice:12000,growDays:55, seasons:null,                unlockLevel:100, alwaysExcellent:true },
+  genesisGem:  { id:'genesisGem',  name:'創世晶果', emoji:'☄️', rarity:'mythic',    seedCost:5500, sellPrice:19000,growDays:65, seasons:null,                unlockLevel:110, alwaysExcellent:true },
+  eternalBloom:{ id:'eternalBloom',name:'永恆之花', emoji:'🔥', rarity:'mythic',    seedCost:8500, sellPrice:30000,growDays:80, seasons:null,                unlockLevel:120, alwaysExcellent:true },
 };
 
 // ============================================================
@@ -261,7 +269,73 @@ const PETS = {
   chaosdragon: { id:'chaosdragon', name:'混沌龍',  emoji:'🐲', rarity:'mythic',    weight:0.5,
                  buffDesc:'出售 +120%，每次收穫 +120💰，每天 +200💰，生長 +1.5天/天',
                  buff:{ type:'mythic_chaos', sell_pct:1.20, harvest_coins:120, daily_coins:200, grow_bonus:1.50 } },
+  // ── NEW Legendary (weight:3) ────────────────────────────────────────────
+  phoenix:     { id:'phoenix',     name:'鳳凰',    emoji:'🦩', rarity:'legendary', weight:3,
+                 buffDesc:'每次收穫 +35💰，品質提升機率 +30%',
+                 buff:{ type:'legendary_phoenix', harvest_coins:35, quality_bonus:0.30 } },
+  icedragon:   { id:'icedragon',   name:'冰晶龍',  emoji:'💎', rarity:'legendary', weight:3,
+                 buffDesc:'出售收入 +40%，XP +45%',
+                 buff:{ type:'legendary_icedragon', sell_pct:0.40, xp_pct:0.45 } },
+  pegasus:     { id:'pegasus',     name:'天馬',    emoji:'🐎', rarity:'legendary', weight:3,
+                 buffDesc:'作物生長 +0.9天/天，種子費用 -30%，每天 +45💰',
+                 buff:{ type:'legendary_pegasus', grow_bonus:0.90, plant_pct:0.30, daily_coins:45 } },
+  seagod:      { id:'seagod',      name:'海神',    emoji:'🔱', rarity:'legendary', weight:3,
+                 buffDesc:'每天 +70💰，出售收入 +35%，每次收穫 +20💰',
+                 buff:{ type:'legendary_seagod', daily_coins:70, sell_pct:0.35, harvest_coins:20 } },
+  thunder:     { id:'thunder',     name:'雷鳥',    emoji:'⚡', rarity:'legendary', weight:3,
+                 buffDesc:'每次收穫 +18 XP，出售收入 +25%，收穫 35% 機率雙倍',
+                 buff:{ type:'legendary_thunder', xp_flat:18, sell_pct:0.25, double_chance:0.35 } },
+  // ── NEW Mythic (weight:0.5) ─────────────────────────────────────────────
+  creator:     { id:'creator',     name:'創世神',  emoji:'👑', rarity:'mythic',    weight:0.5,
+                 buffDesc:'出售 +90%，XP +90%，每次收穫 +100💰，每天 +120💰，生長 +1.2天/天',
+                 buff:{ type:'mythic_creator', sell_pct:0.90, xp_pct:0.90, harvest_coins:100, daily_coins:120, grow_bonus:1.20 } },
+  goddess:     { id:'goddess',     name:'命運女神', emoji:'🌸', rarity:'mythic',   weight:0.5,
+                 buffDesc:'出售 +75%，品質 +70%，種子 -50%，XP +80%',
+                 buff:{ type:'mythic_goddess', sell_pct:0.75, quality_bonus:0.70, plant_pct:0.50, xp_pct:0.80 } },
+  spirit:      { id:'spirit',      name:'混沌神靈', emoji:'🌀', rarity:'mythic',   weight:0.5,
+                 buffDesc:'每次收穫 +150💰，每天 +250💰，生長 +2.5天/天，收穫 60% 機率雙倍',
+                 buff:{ type:'mythic_spirit', harvest_coins:150, daily_coins:250, grow_bonus:2.50, double_chance:0.60 } },
 };
+
+// ── Pet Level-Up Config ─────────────────────────────────────────────
+// Index [0] = requirements to reach Lv2, [1] = Lv3, [2] = Lv4, [3] = Lv5
+const PET_LEVEL_REQ = {
+  common:    [
+    { coins:    300, crops:{ type:'any',        qty:5  } },
+    { coins:   1000, crops:{ type:'excellent',   qty:5  } },
+    { coins:   3000, crops:{ type:'excellent',   qty:10 } },
+    { coins:  10000, crops:{ type:'legendary',   qty:5  } },
+  ],
+  rare:      [
+    { coins:   1500, crops:{ type:'excellent',   qty:5  } },
+    { coins:   6000, crops:{ type:'excellent',   qty:10 } },
+    { coins:  25000, crops:{ type:'legendary',   qty:5  } },
+    { coins: 100000, crops:{ type:'legendary',   qty:10 } },
+  ],
+  premium:   [
+    { coins:   2500, crops:{ type:'excellent',   qty:5  } },
+    { coins:  10000, crops:{ type:'excellent',   qty:10 } },
+    { coins:  40000, crops:{ type:'legendary',   qty:5  } },
+    { coins: 150000, crops:{ type:'legendary',   qty:10 } },
+  ],
+  legendary: [
+    { coins:  15000, crops:{ type:'legendary',   qty:5  } },
+    { coins:  60000, crops:{ type:'legendary',   qty:10 } },
+    { coins: 250000, crops:{ type:'mythic_crop', qty:3  } },
+    { coins:1000000, crops:{ type:'mythic_crop', qty:8  } },
+  ],
+  mythic:    [
+    { coins:  80000, crops:{ type:'legendary',   qty:5  } },
+    { coins: 300000, crops:{ type:'legendary',   qty:10 } },
+    { coins: 800000, crops:{ type:'mythic_crop', qty:5  } },
+    { coins:3000000, crops:{ type:'mythic_crop', qty:10 } },
+  ],
+};
+// buff multiplier per level (index = level − 1)
+const PET_LEVEL_MULT       = [1.0, 1.25, 1.55, 1.90, 2.30];
+const PET_MAX_SLOTS_BASE   = 5;
+const PET_SLOT_EXPAND_COST = 1000000;
+const PET_MAX_SLOTS_LIMIT  = 8;
 
 // ── Pet helpers ──────────────────────────────────────────────────────
 function generateDailyPets() {
@@ -299,16 +373,22 @@ function getMyPets() {
   return state.pets.myPets.map(p => PETS[p.petId]).filter(Boolean);
 }
 
-// Sum a numeric field across all pets that have a given buff type
+// Returns buff multiplier for a pet based on its level
+function getPetLevelMult(petId) {
+  const entry = (state?.pets?.myPets || []).find(p => p.petId === petId);
+  return PET_LEVEL_MULT[((entry?.level) || 1) - 1] ?? 1.0;
+}
+
+// Sum a numeric field across all pets that have a given buff type (scaled by pet level)
 function getPetBuffTotal(type, field) {
-  return getMyPets()
-    .filter(p => p.buff.type === type)
-    .reduce((sum, p) => sum + (p.buff[field] || 0), 0);
+  return (state?.pets?.myPets || [])
+    .filter(p => PETS[p.petId]?.buff?.type === type)
+    .reduce((sum, p) => sum + (PETS[p.petId]?.buff?.[field] || 0) * getPetLevelMult(p.petId), 0);
 }
 
 // True if any owned pet has the given buff type
 function hasPetBuff(type) {
-  return getMyPets().some(p => p.buff.type === type);
+  return (state?.pets?.myPets || []).some(p => PETS[p.petId]?.buff?.type === type);
 }
 
 function getSellMultiplier() {
@@ -317,9 +397,14 @@ function getSellMultiplier() {
   mult += getPetBuffTotal('legendary_unicorn', 'sell_pct');
   mult += getPetBuffTotal('legendary_lion', 'sell_pct');
   mult += getPetBuffTotal('legendary_angel', 'sell_pct');
+  mult += getPetBuffTotal('legendary_icedragon', 'sell_pct');
+  mult += getPetBuffTotal('legendary_seagod', 'sell_pct');
+  mult += getPetBuffTotal('legendary_thunder', 'sell_pct');
   mult += getPetBuffTotal('mythic_cosmos', 'sell_pct');
   mult += getPetBuffTotal('mythic_fate', 'sell_pct');
   mult += getPetBuffTotal('mythic_chaos', 'sell_pct');
+  mult += getPetBuffTotal('mythic_creator', 'sell_pct');
+  mult += getPetBuffTotal('mythic_goddess', 'sell_pct');
   return mult;
 }
 
@@ -417,33 +502,33 @@ const LEVELS = [
   { level:59,  xp:259550, title:'農業大師五段' },
   { level:60,  xp:268450, title:'農耕先鋒',   unlocks:['peach'] },
   { level:61,  xp:277500, title:'農耕先鋒二段' },
-  { level:62,  xp:286700, title:'農耕先鋒三段' },
+  { level:62,  xp:286700, title:'農耕先鋒三段', unlocks:['mango'] },
   { level:63,  xp:296050, title:'農耕先鋒四段' },
   { level:64,  xp:305550, title:'農耕先鋒五段' },
   { level:65,  xp:315200, title:'豐收之王',   unlocks:['coconut'] },
   { level:66,  xp:325000, title:'豐收之王二段' },
-  { level:67,  xp:334950, title:'豐收之王三段' },
+  { level:67,  xp:334950, title:'豐收之王三段', unlocks:['pineapple'] },
   { level:68,  xp:345050, title:'豐收之王四段' },
   { level:69,  xp:355300, title:'豐收之王五段' },
   { level:70,  xp:365700, title:'神農',       unlocks:['rose'] },
   { level:71,  xp:376250, title:'神農二段' },
   { level:72,  xp:386950, title:'神農三段' },
-  { level:73,  xp:397800, title:'神農四段' },
+  { level:73,  xp:397800, title:'神農四段',    unlocks:['olive'] },
   { level:74,  xp:408800, title:'神農五段' },
   { level:75,  xp:419950, title:'大地守護者',  unlocks:['lotus'] },
   { level:76,  xp:431250, title:'大地守護者二段' },
-  { level:77,  xp:442700, title:'大地守護者三段' },
+  { level:77,  xp:442700, title:'大地守護者三段', unlocks:['darkMoon'] },
   { level:78,  xp:454300, title:'大地守護者四段' },
   { level:79,  xp:466050, title:'大地守護者五段' },
   { level:80,  xp:477950, title:'四季農仙',   unlocks:['crystalHerb'] },
   { level:81,  xp:490000, title:'四季農仙二段' },
   { level:82,  xp:502200, title:'四季農仙三段' },
-  { level:83,  xp:514550, title:'四季農仙四段' },
+  { level:83,  xp:514550, title:'四季農仙四段', unlocks:['shenHerb'] },
   { level:84,  xp:527050, title:'四季農仙五段' },
   { level:85,  xp:539700, title:'穀物聖者',   unlocks:['starBlossom'] },
   { level:86,  xp:552500, title:'穀物聖者二段' },
   { level:87,  xp:565450, title:'穀物聖者三段' },
-  { level:88,  xp:578550, title:'穀物聖者四段' },
+  { level:88,  xp:578550, title:'穀物聖者四段', unlocks:['auroraGem'] },
   { level:89,  xp:591800, title:'穀物聖者五段' },
   { level:90,  xp:605200, title:'萬物耕者',   unlocks:['sacredBamboo'] },
   { level:91,  xp:618750, title:'萬物耕者二段' },
@@ -466,7 +551,7 @@ const LEVELS = [
   { level:107, xp:855950,   title:'宇宙農仙二段' },
   { level:108, xp:872050,   title:'宇宙農仙三段' },
   { level:109, xp:888300,   title:'宇宙農仙四段' },
-  { level:110, xp:904700,   title:'宇宙農仙五段' },
+  { level:110, xp:904700,   title:'宇宙農仙五段', unlocks:['genesisGem'] },
   { level:111, xp:921250,   title:'神話農王' },
   { level:112, xp:937950,   title:'神話農王二段' },
   { level:113, xp:954800,   title:'神話農王三段' },
@@ -476,7 +561,7 @@ const LEVELS = [
   { level:117, xp:1023700,  title:'超凡農聖二段' },
   { level:118, xp:1041300,  title:'超凡農聖三段' },
   { level:119, xp:1059050,  title:'超凡農聖四段' },
-  { level:120, xp:1076950,  title:'超凡農聖五段' },
+  { level:120, xp:1076950,  title:'超凡農聖五段', unlocks:['eternalBloom'] },
   { level:121, xp:1095000,  title:'農道至尊' },
   { level:122, xp:1113200,  title:'農道至尊二段' },
   { level:123, xp:1131550,  title:'農道至尊三段' },
@@ -772,7 +857,8 @@ function freshState() {
     questProgress:  { earn:0 },
     dayTimeLeft:    120,   // seconds remaining to plant this day (2 minutes)
     pets: {
-      myPets:        [],    // [{ petId }] — max 5
+      myPets:        [],    // [{ petId, level }] — max maxSlots
+      maxSlots:      PET_MAX_SLOTS_BASE,
       activePetId:   null,  // which myPet is currently providing buff
       dailyPets:     [],    // filled after freshState() in initGame
       recruitedPets: [],    // petIds recruited via gacha, pending feeding
@@ -808,12 +894,15 @@ function loadGame() {
     if (!s.stats.totalWatered)       s.stats.totalWatered  = 0;
     if (!s.stats.maxDayHarvest)      s.stats.maxDayHarvest = 0;
     if (s.dayTimeLeft === undefined)  s.dayTimeLeft = 120;
-    if (!s.pets) s.pets = { myPets: [], activePetId: null, dailyPets: [], newPets: false, feeding: {} };
-    if (!s.pets.myPets)   s.pets.myPets   = [];
+    if (!s.pets) s.pets = { myPets: [], maxSlots: PET_MAX_SLOTS_BASE, activePetId: null, dailyPets: [], newPets: false, feeding: {} };
+    if (!s.pets.myPets)         s.pets.myPets         = [];
+    if (!s.pets.maxSlots)       s.pets.maxSlots       = PET_MAX_SLOTS_BASE;
     if (!s.pets.feeding)        s.pets.feeding        = {};
     if (!s.pets.dailyPets)      s.pets.dailyPets      = [];
     if (!s.pets.recruitedPets)  s.pets.recruitedPets  = [];
     if (!s.pets.recruitedDays)  s.pets.recruitedDays  = {};
+    // Migrate: ensure every myPets entry has a level field
+    s.pets.myPets = s.pets.myPets.map(p => ({ petId: p.petId, level: p.level || 1 }));
     if (!s.usedCodes) s.usedCodes = [];
     // migrate: old single-pet activePetId → myPets array
     if (s.pets.activePetId && s.pets.myPets.length === 0) {
@@ -883,15 +972,19 @@ function addXP(amount, source) {
   const xpPct = getPetBuffTotal('legendary_unicorn', 'xp_pct')
               + getPetBuffTotal('legendary_moonrabbit', 'xp_pct')
               + getPetBuffTotal('legendary_seadragon', 'xp_pct')
+              + getPetBuffTotal('legendary_icedragon', 'xp_pct')
               + getPetBuffTotal('mythic_cosmos', 'xp_pct')
               + getPetBuffTotal('mythic_fate', 'xp_pct')
-              + getPetBuffTotal('mythic_time', 'xp_pct');
+              + getPetBuffTotal('mythic_time', 'xp_pct')
+              + getPetBuffTotal('mythic_creator', 'xp_pct')
+              + getPetBuffTotal('mythic_goddess', 'xp_pct');
   if (xpPct > 0) amount = Math.round(amount * (1 + xpPct));
   // Harvest XP % and flat bonuses
   if (source === 'harvest') {
     const harvestPct = getPetBuffTotal('harvest_xp', 'pct');
     if (harvestPct > 0) amount = Math.round(amount * (1 + harvestPct));
     amount += getPetBuffTotal('harvest_xp_flat', 'amount');
+    amount += getPetBuffTotal('legendary_thunder', 'xp_flat');
   }
   // Plant XP flat bonus
   if (source === 'plant') {
@@ -1044,8 +1137,10 @@ function plantSeed(idx) {
   const totalDiscount = getPetBuffTotal('plant_discount', 'pct')
                       + getPetBuffTotal('legendary_moonrabbit', 'plant_pct')
                       + getPetBuffTotal('legendary_seadragon', 'plant_pct')
+                      + getPetBuffTotal('legendary_pegasus', 'plant_pct')
                       + getPetBuffTotal('mythic_worldtree', 'plant_pct')
-                      + getPetBuffTotal('mythic_time', 'plant_pct');
+                      + getPetBuffTotal('mythic_time', 'plant_pct')
+                      + getPetBuffTotal('mythic_goddess', 'plant_pct');
   if (!inStash && totalDiscount > 0) {
     actualCost = Math.max(1, Math.floor(actualCost * (1 - totalDiscount)));
   }
@@ -1121,8 +1216,10 @@ function harvestTile(idx, silent = false) {
     let goodChance = (state.season === 'autumn') ? 0.3 : 0;
     goodChance = Math.min(1, goodChance
       + getPetBuffTotal('quality_chance', 'bonus')
+      + getPetBuffTotal('legendary_phoenix', 'quality_bonus')
       + getPetBuffTotal('mythic_worldtree', 'quality_bonus')
-      + getPetBuffTotal('mythic_time', 'quality_bonus'));
+      + getPetBuffTotal('mythic_time', 'quality_bonus')
+      + getPetBuffTotal('mythic_goddess', 'quality_bonus'));
     if (hasPetBuff('rain_quality') && state.weather === 'rain') goodChance = 1;
     if (Math.random() < goodChance) quality = 'good';
   }
@@ -1131,7 +1228,9 @@ function harvestTile(idx, silent = false) {
   addToInventory(tile.crop, quality);
 
   // Pet: double harvest — stack chances, cap at 95%
-  const doubleChance = Math.min(0.95, getPetBuffTotal('double_harvest', 'chance'));
+  const doubleChance = Math.min(0.95, getPetBuffTotal('double_harvest', 'chance')
+                                    + getPetBuffTotal('legendary_thunder', 'double_chance')
+                                    + getPetBuffTotal('mythic_spirit', 'double_chance'));
   if (doubleChance > 0 && Math.random() < doubleChance) {
     addToInventory(tile.crop, quality);
     addLog(`🦅 雙倍收穫！獲得額外 ${crop.emoji}！`, 'good');
@@ -1140,9 +1239,13 @@ function harvestTile(idx, silent = false) {
   const harvestCoins = getPetBuffTotal('harvest_coins', 'amount')
                      + getPetBuffTotal('legendary_lion', 'harvest_coins')
                      + getPetBuffTotal('legendary_angel', 'harvest_coins')
+                     + getPetBuffTotal('legendary_phoenix', 'harvest_coins')
+                     + getPetBuffTotal('legendary_seagod', 'harvest_coins')
                      + getPetBuffTotal('mythic_worldtree', 'harvest_coins')
                      + getPetBuffTotal('mythic_fate', 'harvest_coins')
-                     + getPetBuffTotal('mythic_chaos', 'harvest_coins');
+                     + getPetBuffTotal('mythic_chaos', 'harvest_coins')
+                     + getPetBuffTotal('mythic_creator', 'harvest_coins')
+                     + getPetBuffTotal('mythic_spirit', 'harvest_coins');
   if (harvestCoins > 0) state.coins += harvestCoins;
   // Seasonal bonus coins
   const seasonBonus =
@@ -1225,9 +1328,13 @@ function doAdvanceDay() {
                       + getPetBuffTotal('legendary_dragon', 'daily_coins')
                       + getPetBuffTotal('legendary_storm', 'daily_coins')
                       + getPetBuffTotal('legendary_angel', 'daily_coins')
+                      + getPetBuffTotal('legendary_pegasus', 'daily_coins')
+                      + getPetBuffTotal('legendary_seagod', 'daily_coins')
                       + getPetBuffTotal('mythic_cosmos', 'daily_coins')
                       + getPetBuffTotal('mythic_fate', 'daily_coins')
-                      + getPetBuffTotal('mythic_chaos', 'daily_coins');
+                      + getPetBuffTotal('mythic_chaos', 'daily_coins')
+                      + getPetBuffTotal('mythic_creator', 'daily_coins')
+                      + getPetBuffTotal('mythic_spirit', 'daily_coins');
   // rain_coins: bonus when today's weather is rain (rolled just after this)
   const newWeather = rollWeather();
   state.weather       = newWeather.type;
@@ -1293,9 +1400,12 @@ function doAdvanceDay() {
         inc += getPetBuffTotal('grow_speed', 'bonus')
              + getPetBuffTotal('legendary_storm', 'grow_bonus')
              + getPetBuffTotal('legendary_seadragon', 'grow_bonus')
+             + getPetBuffTotal('legendary_pegasus', 'grow_bonus')
              + getPetBuffTotal('mythic_cosmos', 'grow_bonus')
              + getPetBuffTotal('mythic_time', 'grow_bonus')
-             + getPetBuffTotal('mythic_chaos', 'grow_bonus');
+             + getPetBuffTotal('mythic_chaos', 'grow_bonus')
+             + getPetBuffTotal('mythic_creator', 'grow_bonus')
+             + getPetBuffTotal('mythic_spirit', 'grow_bonus');
         tile.growthDay += inc;
         tile.watered    = false;
         tile.wiltedDays = 0;
@@ -1688,11 +1798,12 @@ const REDEEM_CODES = {
   'BC_Moon':    { desc:'獲得隨機普通寵物 + 稀有寵物', apply(){
     const commons     = Object.values(PETS).filter(p => p.rarity === 'common');
     const rares       = Object.values(PETS).filter(p => p.rarity === 'rare');
-    const commonPet   = commons[Math.floor(Math.random() * commons.length)];
-    const rarePet     = rares [Math.floor(Math.random() * rares.length)];
+    const commonPet    = commons[Math.floor(Math.random() * commons.length)];
+    const rarePet      = rares [Math.floor(Math.random() * rares.length)];
+    const maxSlots_mc  = state.pets.maxSlots || PET_MAX_SLOTS_BASE;
     [commonPet, rarePet].forEach(pet => {
-      if (state.pets.myPets.length < 5 && !state.pets.myPets.some(p => p.petId === pet.id)) {
-        state.pets.myPets.push({ petId: pet.id });
+      if (state.pets.myPets.length < maxSlots_mc && !state.pets.myPets.some(p => p.petId === pet.id)) {
+        state.pets.myPets.push({ petId: pet.id, level: 1 });
         if (!state.pets.activePetId) state.pets.activePetId = pet.id;
         addLog(`🐾 兌換碼：獲得 ${pet.emoji} ${pet.name}！`, 'good');
       } else {
@@ -1711,10 +1822,11 @@ const REDEEM_CODES = {
     if (state.pets.myPets.some(p => p.petId === 'dragon')) {
       addLog('🐉 你已經擁有金龍了！', 'warn'); return;
     }
-    if (state.pets.myPets.length >= 5) {
-      addLog('🐉 寵物已滿 5 隻，請先放生一隻！', 'warn'); return;
+    const maxSlots_gg = state.pets.maxSlots || PET_MAX_SLOTS_BASE;
+    if (state.pets.myPets.length >= maxSlots_gg) {
+      addLog(`🐉 寵物已滿 ${maxSlots_gg} 隻，請先放生一隻！`, 'warn'); return;
     }
-    state.pets.myPets.push({ petId: 'dragon' });
+    state.pets.myPets.push({ petId: 'dragon', level: 1 });
     if (!state.pets.activePetId) state.pets.activePetId = 'dragon';
     addLog(`🐉 兌換碼：獲得金龍！`, 'good');
   }},
@@ -1857,25 +1969,43 @@ function renderPets() {
   let html = '';
 
   // ── My Pets ──
-  html += `<div class="pet-section-title">我的寵物 <span class="pet-count-badge">${myPets.length}/5</span> <span style="font-size:.62rem;color:rgba(255,255,255,.45)">所有寵物 buff 同時生效</span></div>`;
+  const maxSlots = state.pets.maxSlots || PET_MAX_SLOTS_BASE;
+  html += `<div class="pet-section-title" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+    我的寵物 <span class="pet-count-badge">${myPets.length}/${maxSlots}</span>
+    <span style="font-size:.6rem;color:rgba(255,255,255,.4);flex:1">所有寵物 buff 同時生效</span>
+    ${maxSlots < PET_MAX_SLOTS_LIMIT
+      ? `<button class="pet-expand-slots-btn">🏠 擴充欄位</button>`
+      : `<span style="font-size:.6rem;color:rgba(255,255,255,.3)">欄位已達上限</span>`
+    }
+  </div>`;
   if (myPets.length === 0) {
     html += '<div class="pet-none">還沒有寵物——餵食下方的寵物後即可收養！</div>';
   } else {
     html += '<div class="pet-my-list">';
-    myPets.forEach(({ petId }) => {
-      const pet = PETS[petId];
+    myPets.forEach(({ petId, level: petLv = 1 }) => {
+      const pet  = PETS[petId];
       if (!pet) return;
+      const mult = PET_LEVEL_MULT[petLv - 1].toFixed(2);
+      const req  = PET_LEVEL_REQ[pet.rarity]?.[petLv - 1];
+      const nextMult = petLv < 5 ? PET_LEVEL_MULT[petLv].toFixed(2) : null;
       html += `
         <div class="pet-my-card rarity-border-${pet.rarity} pet-my-active">
           <span class="pet-my-emoji">${pet.emoji}</span>
           <div class="pet-my-info">
             <div class="pet-card-name">${pet.name}
               <span class="pet-rarity-badge rarity-${pet.rarity}">${RARITY_LABEL[pet.rarity]}</span>
+              <span class="pet-level-badge">Lv.${petLv}</span>
             </div>
             <div class="pet-card-buff">✨ ${pet.buffDesc}</div>
+            <div style="font-size:.6rem;color:#ffd54f;margin-top:2px">
+              buff ×${mult}${petLv >= 5 ? ' ✨MAX' : ` → ×${nextMult}`}
+            </div>
           </div>
           <div class="pet-my-btns">
-            <span class="pet-active-tag">生效中</span>
+            ${petLv < 5
+              ? `<button class="pet-levelup-btn" data-petid="${petId}">⬆️ 升等</button>`
+              : `<span class="pet-maxlv-tag">MAX ✨</span>`
+            }
             <button class="pet-sm-release-btn" data-petid="${petId}">放生</button>
           </div>
         </div>
@@ -2030,6 +2160,10 @@ function renderPets() {
   body.querySelectorAll('.pet-adopt-ready-btn').forEach(btn =>
     btn.addEventListener('click', () => completePetAdoption(btn.dataset.petid))
   );
+  body.querySelectorAll('.pet-levelup-btn').forEach(btn =>
+    btn.addEventListener('click', () => levelUpPet(btn.dataset.petid))
+  );
+  body.querySelector('.pet-expand-slots-btn')?.addEventListener('click', expandPetSlots);
 }
 
 // ── Cancel recruit ────────────────────────────────────────────────
@@ -2292,8 +2426,9 @@ function doFeedPet(petId, qty) {
 
 // ── Complete adoption (called when feeding done) ──────────────────
 function completePetAdoption(petId) {
-  const myPets = state.pets.myPets;
-  if (myPets.length >= 5) {
+  const myPets  = state.pets.myPets;
+  const maxSlots = state.pets.maxSlots || PET_MAX_SLOTS_BASE;
+  if (myPets.length >= maxSlots) {
     showReleaseChoiceModal(petId); return;
   }
   doAddPet(petId);
@@ -2301,7 +2436,7 @@ function completePetAdoption(petId) {
 
 function doAddPet(petId) {
   const pet = PETS[petId];
-  state.pets.myPets.push({ petId });
+  state.pets.myPets.push({ petId, level: 1 });
   if (!state.pets.activePetId) state.pets.activePetId = petId;
   state.pets.recruitedPets = (state.pets.recruitedPets || []).filter(id => id !== petId);
   delete state.pets.feeding[petId];
@@ -2313,8 +2448,9 @@ function doAddPet(petId) {
 
 // ── Full: show release-choice modal ──────────────────────────────
 function showReleaseChoiceModal(newPetId) {
-  const newPet = PETS[newPetId];
-  let body = `<div style="font-size:.84rem;margin-bottom:10px;color:#7a5a40">寵物已滿 5 隻！<br>選擇一隻放生，為 ${newPet.emoji}<strong>${newPet.name}</strong> 騰出位置：</div>`;
+  const newPet   = PETS[newPetId];
+  const maxSlots = state.pets.maxSlots || PET_MAX_SLOTS_BASE;
+  let body = `<div style="font-size:.84rem;margin-bottom:10px;color:#7a5a40">寵物已滿 ${maxSlots} 隻！<br>選擇一隻放生，為 ${newPet.emoji}<strong>${newPet.name}</strong> 騰出位置：</div>`;
   body += '<div style="display:flex;flex-direction:column;gap:7px">';
   state.pets.myPets.forEach(({ petId }) => {
     const p        = PETS[petId];
@@ -2375,6 +2511,147 @@ function releasePetById(petId) {
       { text:'繼續保留', cls:'mbtn-ok', cb: hideModal },
     ],
   });
+}
+
+// ── Pet Level-Up Logic ────────────────────────────────────────────────
+function getCropReqDesc(type) {
+  if (type === 'any')         return '任意農作物';
+  if (type === 'excellent')   return '✨高級農作物';
+  if (type === 'legendary')   return '傳奇農作物';
+  if (type === 'mythic_crop') return '神話農作物';
+  return '農作物';
+}
+
+function countCropsForUpgrade(type) {
+  if (type === 'any')
+    return state.inventory.reduce((s, i) => s + i.quantity, 0);
+  if (type === 'excellent')
+    return state.inventory.filter(i => i.quality === 'excellent').reduce((s, i) => s + i.quantity, 0);
+  if (type === 'legendary')
+    return state.inventory.filter(i => CROPS[i.cropId]?.rarity === 'legendary').reduce((s, i) => s + i.quantity, 0);
+  if (type === 'mythic_crop')
+    return state.inventory.filter(i => CROPS[i.cropId]?.rarity === 'mythic').reduce((s, i) => s + i.quantity, 0);
+  return 0;
+}
+
+function consumeCropsForUpgrade(type, qty) {
+  const pool = type === 'any'
+    ? [...state.inventory]
+    : type === 'excellent'
+      ? state.inventory.filter(i => i.quality === 'excellent')
+      : type === 'legendary'
+        ? state.inventory.filter(i => CROPS[i.cropId]?.rarity === 'legendary')
+        : type === 'mythic_crop'
+          ? state.inventory.filter(i => CROPS[i.cropId]?.rarity === 'mythic')
+          : [];
+  let left = qty;
+  for (const item of pool) {
+    if (left <= 0) break;
+    const use = Math.min(item.quantity, left);
+    item.quantity -= use;
+    left -= use;
+  }
+  state.inventory = state.inventory.filter(i => i.quantity > 0);
+}
+
+function levelUpPet(petId) {
+  const entry = state.pets.myPets.find(p => p.petId === petId);
+  if (!entry) return;
+  const pet = PETS[petId];
+  const lv  = entry.level || 1;
+  if (lv >= 5) {
+    showModal({ emoji:'✨', title:'已達最高等級',
+      body: `${pet.emoji} ${pet.name} 已是最高等級 Lv.5！`,
+      buttons: [{ text:'確定', cls:'mbtn-ok', cb: hideModal }] });
+    return;
+  }
+  const req       = PET_LEVEL_REQ[pet.rarity]?.[lv - 1];
+  if (!req) return;
+  const cropAvail = countCropsForUpgrade(req.crops.type);
+  const cropDesc  = getCropReqDesc(req.crops.type);
+  const curMult   = PET_LEVEL_MULT[lv - 1].toFixed(2);
+  const newMult   = PET_LEVEL_MULT[lv].toFixed(2);
+  const canUpgrade = state.coins >= req.coins && cropAvail >= req.crops.qty;
+
+  const body = `
+    <div style="text-align:center;margin-bottom:12px">
+      <span style="font-size:2.2rem">${pet.emoji}</span>
+      <div style="font-weight:800;margin-top:4px">${pet.name}</div>
+      <div style="font-size:.72rem;color:rgba(0,0,0,.45)">${RARITY_LABEL[pet.rarity]}</div>
+    </div>
+    <div class="srow">等級：<strong>Lv.${lv} → Lv.${lv + 1}</strong></div>
+    <div class="srow">buff 倍率：×${curMult} → <strong style="color:#e65c00">×${newMult}</strong></div>
+    <hr style="border:none;border-top:1px solid rgba(0,0,0,.08);margin:8px 0">
+    <div class="srow ${state.coins >= req.coins ? 'sgood' : 'sbad'}">
+      💰 ${req.coins.toLocaleString()} 金幣（有 ${state.coins.toLocaleString()}）
+    </div>
+    <div class="srow ${cropAvail >= req.crops.qty ? 'sgood' : 'sbad'}">
+      🌾 ${req.crops.qty} 個${cropDesc}（有 ${cropAvail}）
+    </div>
+  `;
+  showModal({
+    emoji: '⬆️', title: '寵物升等',
+    body,
+    buttons: canUpgrade
+      ? [
+          { text: `升等！`, cls: 'mbtn-gold',   cb: () => doLevelUpPet(petId) },
+          { text: '取消',   cls: 'mbtn-cancel', cb: hideModal },
+        ]
+      : [{ text: '材料不足，關閉', cls: 'mbtn-cancel', cb: hideModal }],
+  });
+}
+
+function doLevelUpPet(petId) {
+  const entry = state.pets.myPets.find(p => p.petId === petId);
+  const pet   = PETS[petId];
+  const lv    = entry.level || 1;
+  const req   = PET_LEVEL_REQ[pet.rarity][lv - 1];
+
+  state.coins -= req.coins;
+  consumeCropsForUpgrade(req.crops.type, req.crops.qty);
+  entry.level = lv + 1;
+
+  const mult = PET_LEVEL_MULT[entry.level - 1].toFixed(2);
+  addLog(`🌟 ${pet.emoji}${pet.name} 升到 Lv.${entry.level}！buff ×${mult}`, 'good');
+  saveGame(); renderAll(); renderPets();
+  showModal({
+    emoji: '🌟', title: '升等成功！',
+    body: `${pet.emoji} <strong>${pet.name}</strong> 升到 <strong>Lv.${entry.level}</strong>！<br>buff 強度提升至 <strong>×${mult}</strong>`,
+    buttons: [{ text: '太棒了！', cls: 'mbtn-gold', cb: hideModal }],
+  });
+}
+
+// ── Pet Slot Expansion ────────────────────────────────────────────────
+function expandPetSlots() {
+  const maxSlots = state.pets.maxSlots || PET_MAX_SLOTS_BASE;
+  if (maxSlots >= PET_MAX_SLOTS_LIMIT) {
+    showModal({ emoji:'🏠', title:'已達上限',
+      body: `寵物欄位已達最大 ${PET_MAX_SLOTS_LIMIT} 個！`,
+      buttons: [{ text:'確定', cls:'mbtn-cancel', cb: hideModal }] });
+    return;
+  }
+  if (state.coins < PET_SLOT_EXPAND_COST) {
+    showModal({ emoji:'💸', title:'金幣不足',
+      body: `擴充欄位需要 <strong>${PET_SLOT_EXPAND_COST.toLocaleString()}💰</strong>，目前 ${state.coins.toLocaleString()}💰。`,
+      buttons: [{ text:'確定', cls:'mbtn-cancel', cb: hideModal }] });
+    return;
+  }
+  showModal({
+    emoji: '🏠', title: '擴充寵物欄位',
+    body: `花費 <strong>${PET_SLOT_EXPAND_COST.toLocaleString()}💰</strong> 擴充 1 個寵物欄位？<br><span style="font-size:.82rem;color:rgba(0,0,0,.5)">${maxSlots} 個 → ${maxSlots + 1} 個（上限 ${PET_MAX_SLOTS_LIMIT} 個）</span>`,
+    buttons: [
+      { text: `確定擴充`, cls: 'mbtn-gold',   cb: doExpandPetSlots },
+      { text: '取消',     cls: 'mbtn-cancel', cb: hideModal },
+    ],
+  });
+}
+
+function doExpandPetSlots() {
+  state.coins -= PET_SLOT_EXPAND_COST;
+  state.pets.maxSlots = (state.pets.maxSlots || PET_MAX_SLOTS_BASE) + 1;
+  addLog(`🏠 寵物欄位已擴充至 ${state.pets.maxSlots} 個！`, 'good');
+  saveGame(); renderAll(); renderPets();
+  hideModal();
 }
 
 function renderLog() {
@@ -2519,8 +2796,10 @@ function _applyPlantToTile(idx, tileEl) {
   const totalDiscount = getPetBuffTotal('plant_discount', 'pct')
                       + getPetBuffTotal('legendary_moonrabbit', 'plant_pct')
                       + getPetBuffTotal('legendary_seadragon', 'plant_pct')
+                      + getPetBuffTotal('legendary_pegasus', 'plant_pct')
                       + getPetBuffTotal('mythic_worldtree', 'plant_pct')
-                      + getPetBuffTotal('mythic_time', 'plant_pct');
+                      + getPetBuffTotal('mythic_time', 'plant_pct')
+                      + getPetBuffTotal('mythic_goddess', 'plant_pct');
   if (!inStash && totalDiscount > 0) {
     actualCost = Math.max(1, Math.floor(actualCost * (1 - totalDiscount)));
   }
