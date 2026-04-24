@@ -293,8 +293,8 @@ const PETS = {
                  buffDesc:'出售 +75%，品質 +70%，種子 -50%，XP +80%',
                  buff:{ type:'mythic_goddess', sell_pct:0.75, quality_bonus:0.70, plant_pct:0.50, xp_pct:0.80 } },
   spirit:      { id:'spirit',      name:'混沌神靈', emoji:'🌀', rarity:'mythic',   weight:0.5,
-                 buffDesc:'每次收穫 +150💰，每天 +250💰，生長 +2.5天/天，收穫 60% 機率雙倍',
-                 buff:{ type:'mythic_spirit', harvest_coins:150, daily_coins:250, grow_bonus:2.50, double_chance:0.60 } },
+                 buffDesc:'每次收穫 +150💰，每天 +250💰，生長 +1.5天/天，收穫 60% 機率雙倍',
+                 buff:{ type:'mythic_spirit', harvest_coins:150, daily_coins:250, grow_bonus:1.50, double_chance:0.60 } },
 };
 
 // ── Pet Level-Up Config ─────────────────────────────────────────────
