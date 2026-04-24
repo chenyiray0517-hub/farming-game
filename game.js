@@ -340,12 +340,12 @@ const PET_MAX_SLOTS_LIMIT  = 8;
 // ── Pet helpers ──────────────────────────────────────────────────────
 function generateDailyPets() {
   const level = (state && state.level) || 1;
-  // Legendary/mythic weights scale up with level:
-  //   legendary: 3 + level*0.15  → lv1≈3.15, lv50≈10.5, lv100≈18
-  //   mythic:    0.5 + level*0.05 → lv1≈0.55, lv50≈3,    lv100≈5.5
+  // Legendary/mythic weights scale up with level (daily rotation — conservative):
+  //   legendary: 0.8 + level*0.04 → lv1≈0.84, lv50≈2.8,  lv100≈4.84
+  //   mythic:    0.3 + level*0.02 → lv1≈0.32, lv50≈1.3,  lv100≈2.3
   const effectiveWeight = p => {
-    if (p.rarity === 'mythic')    return 1.2 + level * 0.07;
-    if (p.rarity === 'legendary') return 2.2 + level * 0.11;
+    if (p.rarity === 'mythic')    return 0.3 + level * 0.02;
+    if (p.rarity === 'legendary') return 0.8 + level * 0.04;
     return p.weight;
   };
   const pool  = Object.values(PETS);
@@ -2220,8 +2220,8 @@ function doGachaPull() {
   }
 
   const effectiveWeight = p => {
-    if (p.rarity === 'mythic')    return 1.2 + level * 0.07;
-    if (p.rarity === 'legendary') return 2.2 + level * 0.11;
+    if (p.rarity === 'mythic')    return 0.5 + level * 0.025;
+    if (p.rarity === 'legendary') return 1.0 + level * 0.05;
     return p.weight; // rare: 12
   };
   const total = pool.reduce((s, p) => s + effectiveWeight(p), 0);
